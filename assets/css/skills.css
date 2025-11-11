@@ -1,0 +1,81 @@
+/* Todo está scopiado a body[data-page="skills"] para NO tocar el resto del sitio */
+:root{
+  --bg:#0B0F14;--card:#111827;--ink:#E5E7EB;--ink-soft:#9CA3AF;
+  --accent:#22D3EE;--accent-b:#60A5FA;--line:#334155;
+}
+
+/* ---------- Tipografía y contenedor locales ---------- */
+body[data-page="skills"]{color:var(--ink);background:radial-gradient(1200px 800px at 20% -10%, #0b1220 0%, var(--bg) 60%)}
+body[data-page="skills"] .container{max-width:1150px;margin:0 auto;padding:0 1rem}
+
+/* ---------- Secciones y títulos (local) ---------- */
+body[data-page="skills"] .skills-section{padding:72px 0}
+body[data-page="skills"] .skills-hero{display:grid;place-items:center;text-align:center;padding:42px 0}
+body[data-page="skills"] .skills-h1{font-size:clamp(36px,4.2vw,62px);line-height:1.05;margin:0}
+body[data-page="skills"] .skills-h2{font-size:clamp(24px,3vw,36px);margin:0 0 10px}
+body[data-page="skills"] .skills-kicker{letter-spacing:.18em;color:#67e8f9;font-weight:800}
+body[data-page="skills"] .skills-subtitle{color:#cbd5e1;max-width:760px;margin:8px auto 0;text-wrap:balance}
+
+/* ---------- Botones locales ---------- */
+body[data-page="skills"] .skills-row{display:flex;gap:12px;flex-wrap:wrap}
+body[data-page="skills"] .skills-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:700}
+body[data-page="skills"] .skills-btn-ghost{border:1px solid var(--line);background:rgba(15,23,42,.6);color:var(--ink)}
+body[data-page="skills"] .skills-btn-accent{background:linear-gradient(90deg,var(--accent),var(--accent-b));color:#0b1220}
+
+/* ---------- Tarjetas y grillas locales ---------- */
+body[data-page="skills"] .skills-grid{display:grid;gap:22px}
+body[data-page="skills"] .skills-cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+body[data-page="skills"] .skills-card{border:1px solid var(--line);background:rgba(15,23,42,.4);border-radius:18px;padding:22px;overflow:hidden}
+body[data-page="skills"] .skills-muted{color:#94a3b8}
+
+/* ---------- Barras de nivel ---------- */
+body[data-page="skills"] .skills-sname{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+body[data-page="skills"] .level{font-weight:800;color:#67e8f9}
+body[data-page="skills"] .sbar{height:10px;border-radius:999px;background:#0f172a;border:1px solid #334155;overflow:hidden}
+body[data-page="skills"] .sbar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#22D3EE,#60A5FA)}
+
+/* ---------- Tabla soft skills ---------- */
+body[data-page="skills"] .skills-table{width:100%;border-collapse:separate;border-spacing:0 10px}
+body[data-page="skills"] .skills-table td{background:rgba(15,23,42,.45);border:1px solid #334155;padding:12px;border-radius:10px}
+
+/* ---------- Tools (aprendizaje) ---------- */
+body[data-page="skills"] .tools{display:flex;gap:16px;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+body[data-page="skills"] .tool{flex:0 0 240px;scroll-snap-align:center;border:1px solid #334155;background:rgba(15,23,42,.45);border-radius:16px;padding:16px;transition:transform .25s}
+body[data-page="skills"] .tool:hover{transform:translateY(-4px)}
+body[data-page="skills"] .tool small{color:#94a3b8}
+body[data-page="skills"] .krow{display:flex;align-items:center;gap:10px;color:#e5e7eb}
+
+/* ---------- Certificaciones (donuts) ---------- */
+body[data-page="skills"] .donuts-wrap{
+  max-height: 320px;
+  overflow:auto;
+  overscroll-behavior: contain;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(2,6,23,.35);
+  padding:12px;
+}
+body[data-page="skills"] .donuts-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:16px;
+}
+body[data-page="skills"] .donut-item{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+body[data-page="skills"] .donut{width:130px;height:130px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#22D3EE 0deg, rgba(34,211,238,.15) 0deg)}
+body[data-page="skills"] .donut .inner{width:72%;height:72%;border-radius:50%;background:#0b1220;border:1px solid #1f2937;display:grid;place-items:center;color:#cbd5e1;font-size:.95rem;font-weight:700}
+body[data-page="skills"] .donut-label{color:#cbd5e1;font-size:.9rem;line-height:1.25}
+body[data-page="skills"] .donut-item:hover .donut-label,
+body[data-page="skills"] .donut-item:focus .donut-label{color:#22D3EE}
+body[data-page="skills"] .course-tip{position:sticky;bottom:0;margin-top:12px;padding:8px 10px;display:none;background:rgba(34,211,238,.10);border:1px solid #22d3ee33;color:#e5e7eb;border-radius:10px}
+
+/* ---------- Animaciones locales ---------- */
+body[data-page="skills"] .reveal{opacity:0;transform:translateY(16px);will-change:transform,opacity}
+body[data-page="skills"] .reveal.in{opacity:1;transform:none;transition:transform .6s cubic-bezier(.2,.6,.2,1),opacity .6s ease}
+body[data-page="skills"] [data-animate="fade-left"]{transform:translateX(24px)}
+body[data-page="skills"] [data-animate="fade-right"]{transform:translateX(-24px)}
+body[data-page="skills"] [data-animate="fade-up"]{transform:translateY(24px)}
+body[data-page="skills"] .ripple{position:relative;overflow:hidden}
+body[data-page="skills"] .ripple::after{content:"";position:absolute;inset:0;background:radial-gradient(circle closest-side,rgba(255,255,255,.35),transparent 60%);opacity:0;transform:scale(.2);transition:opacity .35s,transform .35s}
+body[data-page="skills"] .ripple.active::after{opacity:1;transform:scale(1)}
+body[data-page="skills"] .btn-magnetic{transition:transform .1s}
+body[data-page="skills"] .btn-magnetic.magnet{transform:translate(var(--tx,0),var(--ty,0))}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alexis Samboy — Analista de Datos | Portafolio</title>
+  <meta name="description" content="Portafolio profesional de Alexis Samboy: analista de datos en evolución hacia ciencia de datos y machine learning. Proyectos, habilidades, CV y contacto." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%23002d62'/%3E%3Cpath d='M20 70 L42 30 L58 70 L80 30' stroke='%23fff' stroke-width='8' fill='none'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js for radar -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Feather icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <!-- Progress bar -->
+  <div id="progress" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M3 14l6-6 4 4 7-7"/></svg>
+        </div>
+        <strong>Alexis Samboy</strong>
+      </div>
+      <nav class="links">
+        <a href="#inicio">Inicio</a>
+        <a href="#sobre-mi">Sobre mí</a>
+        <a href="skills.html">Habilidades</a>
+        <a href="./projects.html">Proyectos</a>
+        <a href="./assets/docs/Alexis_Samboy_CV.pdf">Currículum</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="hero section">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="container grid hero-grid">
+      <!-- Panel + tarjeta -->
+      <div class="panel">
+        <div class="panel-bg reveal" data-animate="blur-in"></div>
+        <div class="floating-card tilt reveal" data-animate="fade-up" data-delay="100">
+          <div className="h-48 md:h-56 w-full overflow-hidden bg-slate-200">
+  <img
+    src="./assets/img/alexis-samboy-analista-datos.png"
+    alt="Foto de Alexis Samboy"
+    className="h-full w-full object-cover object-top"
+    loading="lazy"
+  />
+</div>
+          <div class="body">
+            <div class="tag">CURRÍCULUM</div>
+            <h3>Alexis V. Samboy Herrera</h3>
+            <div class="subtitle">Analista de Datos Jr.</div>
+            <div class="social">
+              <a id="link-github" href="https://github.com/AlexisSamboy" aria-label="GitHub" class="btn-icon ripple"><i data-feather="github"></i></a>
+              <a id="link-linkedin" href="https://www.linkedin.com/in/alexis-samboy-herrera/" aria-label="LinkedIn" class="btn-icon ripple"><i data-feather="linkedin"></i></a>
+              <a id="link-email" href="mailto:alexissamboy1998@gmail.com" aria-label="Email" class="btn-icon ripple"><i data-feather="mail"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copy + CTA -->
+      <div class="hero-copy reveal" data-animate="fade-left">
+        <h1 class="h1">Hola</h1>
+        <p class="lead">Soy Alexis Samboy — Analista de Datos en evolución hacia <span class="accent">Data Science</span> y <span class="accent">Machine Learning</span>.</p>
+        <p class="p">Base sólida en soporte técnico, SQL y visualización (Power BI, Excel, Python). Construyo soluciones con impacto en negocio y documento el proceso para que los equipos tomen mejores decisiones.</p>
+
+        <div class="row">
+          <a class="btn btn-ghost ripple" href="./docs/Alexis_Samboy_CV.pdf"><i data-feather="download"></i> Currículum</a>
+          <a class="btn btn-accent ripple btn-magnetic" href="./projects.html"><i data-feather="rocket"></i> Proyectos</a>
+          <a class="btn btn-ghost ripple" id="btn-cv-pdf" href="./docs/Alexis_Samboy_CV.pdf"><i data-feather="file-text"></i> Descargar CV</a>
+        </div>
+        <div class="meta"><span><i data-feather="eye"></i> <span id="visits">0</span> visitas</span><span><i data-feather="git-branch"></i> Actualizado continuamente</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE MI -->
+  <section id="sobre-mi" class="section">
+    <div class="container grid two-col">
+      <div class="card reveal" data-animate="fade-up">
+        <p>
+          Soy Alexis, analista de datos con trayectoria previa en soporte técnico. Mi fortaleza es transformar
+          datos en decisiones: preparo, limpio y visualizo información para responder preguntas de negocio.
+          Dominar SQL y Power BI me ha permitido construir dashboards claros y accionables. En paralelo, practico
+          Python para análisis y primeros modelos de ML con sklearn. Mi objetivo profesional es especializarme en
+          <strong class="accent">ciencia de datos aplicada</strong>, llevando modelos al mundo real y resolviendo problemas concretos.
+        </p>
+      </div>
+      <div class="card reveal" data-animate="fade-up" data-delay="80">
+        <h4 class="card-title">Pilares</h4>
+        <ul class="list">
+          <li>Infraestructura y diagnóstico (soporte)</li>
+          <li>Modelado y consultas SQL eficientes</li>
+          <li>Visualizaciones con enfoque de negocio</li>
+          <li>Aprendizaje continuo y documentación</li>
+        </ul>
+        <div class="row">
+          <a class="btn link" id="pill-linkedin" href="https://www.linkedin.com/in/alexis-samboy-herrera/"><i data-feather="linkedin"></i> LinkedIn</a>
+          <a class="btn link" id="pill-github" href="https://github.com/AlexisSamboy"><i data-feather="github"></i> GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABILIDADES -->
+  <section id="habilidades" class="section">
+    <div class="container grid skills-grid">
+      <div class="card reveal" data-animate="fade-right">
+        <canvas id="radarSkills" height="320"></canvas>
+      </div>
+      <div class="grid reveal" data-animate="fade-left">
+        <div class="card"><div class="krow"><i data-feather="bar-chart-2"></i><strong>Análisis & Visualización</strong></div><div class="muted">Power BI — Excel avanzado — Python (pandas)</div></div>
+        <div class="card"><div class="krow"><i data-feather="database"></i><strong>Bases de datos</strong></div><div class="muted">MySQL — SQL avanzado — CTEs & ventanas</div></div>
+        <div class="card"><div class="krow"><i data-feather="cpu"></i><strong>Machine Learning (inicio)</strong></div><div class="muted">sklearn — regresiones — clustering básico</div></div>
+        <div class="card"><div class="krow"><i data-feather="tool"></i><strong>Soporte técnico</strong></div><div class="muted">hardware — redes — diagnóstico</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CV -->
+  <section id="cv" class="section">
+    <div class="container card reveal" data-animate="fade-up">
+      <h2 class="h2">Currículum Interactivo</h2>
+      <p class="muted">Línea de tiempo con la evolución profesional y enlaces de descarga.</p>
+      <div class="timeline">
+        <div class="timeline-item"><div class="muted">2018–2021</div><div class="t">Soporte técnico</div><div class="muted">Atención a incidencias, mantenimiento preventivo, cableado y redes, documentación.</div></div>
+        <div class="timeline-item"><div class="muted">2021–2023</div><div class="t">Transición a datos</div><div class="muted">Automatización en Excel, SQL inicial, indicadores y reportes periódicos.</div></div>
+        <div class="timeline-item"><div class="muted">2023–2025</div><div class="t">Analista de datos</div><div class="muted">Dashboards en Power BI, SQL avanzado, EDA, comunicación con negocio.</div></div>
+        <div class="timeline-item"><div class="muted">2025→</div><div class="t">Ciencia de datos (en curso)</div><div class="muted">Modelos supervisados, features, validación, despliegue ligero.</div></div>
+      </div>
+      <div class="row">
+        <a id="btn-download-cv" class="btn btn-outline ripple" href="#"><i data-feather="download"></i> Descargar CV en PDF</a>
+        <a class="btn btn-ghost ripple" href="#contacto"><i data-feather="mail"></i> Contactar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="section">
+    <div class="container grid two-col">
+      <form id="contactForm" class="card reveal" data-animate="fade-right">
+        <div class="grid ggap">
+          <div><label class="muted" for="name">Nombre</label><input id="name" class="input" required placeholder="Tu nombre" /></div>
+          <div><label class="muted" for="email">Email</label><input id="email" class="input" type="email" required placeholder="tu@correo.com" /></div>
+          <div><label class="muted" for="message">Mensaje</label><textarea id="message" class="textarea" rows="5" required placeholder="Cuéntame sobre tu proyecto o vacante"></textarea></div>
+          <button class="btn btn-accent ripple btn-magnetic" type="submit"><i data-feather="send"></i> Enviar</button>
+          <p id="formNotice" class="muted" style="display:none">¡Gracias! Se abrió tu cliente de correo para enviar el mensaje 😊</p>
+        </div>
+      </form>
+
+      <div class="card reveal" data-animate="fade-left">
+        <h4 class="card-title">Conecta</h4>
+        <ul class="contact-list">
+          <li><i data-feather="github"></i> <a id="foot-github" href="#" class="alink">GitHub</a></li>
+          <li><i data-feather="linkedin"></i> <a id="foot-linkedin" href="#" class="alink">LinkedIn</a></li>
+          <li><i data-feather="mail"></i> <a id="foot-email" href="#" class="alink">alexis.samboy@example.com</a></li>
+        </ul>
+        <div class="card inner-note">
+          <small class="muted">Tip: agrega tu ID de Google Analytics en el bloque de configuración para activar métricas reales. El contador actual usa <code>localStorage</code> como demo.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container fwrap">
+      <small class="muted">© <span id="year"></span> Alexis Samboy. Todos los derechos reservados.</small>
+      <div class="fnav"><a href="#inicio" class="muted">Inicio</a><a class="muted" href="#proyectos">Proyectos</a><a class="muted" href="#contacto">Contacto</a></div>
+    </div>
+  </footer>
+
+  <script src="./assets/js/main.js" defer></script>
+</body>
+</html>

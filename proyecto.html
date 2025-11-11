@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dashboard del proyecto</title>
+  <meta name="description" content="Dashboard con filtros, KPIs, gráficas y sincronización entre pestañas."/>
+  <!-- Estilos encapsulados (prefijo pj-) -->
+  <style>
+    :root{--pj-bg:#0f172a;--pj-bg2:#0b1220;--pj-line:#334155;--pj-card:#0b1220;--pj-text:#e5e7eb;--pj-muted:#9ca3af;--pj-cyan:#22d3ee;--pj-blue:#60a5fa;--pj-radius:16px}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1000px 700px at 18% -6%, var(--pj-bg2) 0%, var(--pj-bg) 60%), var(--pj-bg);color:var(--pj-text);font:16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
+    .pj-container{max-width:1200px;margin:0 auto;padding:0 18px}
+    .pj-header{position:sticky;top:0;z-index:20;background:rgba(2,6,23,.5);backdrop-filter:blur(6px) saturate(130%);border-bottom:1px solid var(--pj-line)}
+    .pj-nav{height:64px;display:flex;align-items:center;justify-content:space-between}
+    .pj-brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .pj-logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--pj-cyan),var(--pj-blue));color:#07121c;box-shadow:0 6px 18px rgba(34,211,238,.25)}
+    .pj-links a{color:#cbd5e1;text-decoration:none;margin-left:18px}
+    .pj-links a:hover{color:#fff}
+    .pj-hero{padding:42px 0 20px}
+    .pj-h1{font-size:clamp(32px,5.5vw,48px);margin:.25rem 0 .5rem}
+    .pj-sub{color:#cbd5e1;max-width:900px}
+    .pj-sync{margin-left:12px;color:var(--pj-cyan);opacity:.75}
+    .pj-sync.pulse{animation:pj-pulse 1s ease}
+    @keyframes pj-pulse{0%{text-shadow:0 0 0 var(--pj-cyan);transform:scale(1)}50%{text-shadow:0 0 12px var(--pj-cyan);transform:scale(1.15)}100%{text-shadow:0 0 0 var(--pj-cyan);transform:scale(1)}}
+
+    .pj-main{display:grid;grid-template-columns:300px 1fr;gap:20px;margin:10px 0 40px}
+    @media (max-width:980px){.pj-main{grid-template-columns:1fr}}
+    .pj-aside{border:1px solid var(--pj-line);background:rgba(2,6,23,.45);border-radius:var(--pj-radius);padding:16px}
+    .pj-filters{display:grid;gap:10px}
+    .pj-filters label{display:grid;gap:6px;font-size:.92rem;color:#cbd5e1}
+    .pj-filters input,.pj-filters select{background:#0b1220;color:#e5e7eb;border:1px solid var(--pj-line);border-radius:10px;padding:8px}
+    .pj-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--pj-line);background:#0b1220;color:#e5e7eb;border-radius:10px;padding:8px 12px;text-decoration:none}
+    .pj-btn:hover{background:#0e1524}
+    .pj-btn--primary{background:#0b1b33;border-color:#1f3a6d;color:#dbeafe}
+    .pj-btn--primary:hover{background:#12325b}
+
+    .pj-kpis{display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin-bottom:16px}
+    @media (max-width:640px){.pj-kpis{grid-template-columns:1fr}}
+    .pj-kpi{border:1px solid var(--pj-line);background:#0b1220;border-radius:14px;padding:12px;display:grid}
+    .pj-kpi span{color:#b6c2d4;font-size:.9rem}
+    .pj-kpi strong{font-size:1.4rem}
+
+    .pj-cards{display:grid;gap:16px;grid-template-columns:1fr}
+    @media (min-width:900px){.pj-cards{grid-template-columns:repeat(2,1fr)}}
+    .pj-card{border:1px solid var(--pj-line);background:linear-gradient(180deg,rgba(15,23,42,.55),rgba(2,6,23,.35));border-radius:var(--pj-radius);padding:12px}
+    .pj-card h3{margin:6px 0 10px}
+    .pj-tablewrap{overflow:auto;max-height:320px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid var(--pj-line);padding:8px;text-align:left}
+    tbody tr:hover{background:rgba(34,211,238,.06)}
+
+    .pj-sidecard{margin-top:16px;border:1px solid var(--pj-line);background:#0b1220;border-radius:14px;padding:12px}
+    .pj-footer{border-top:1px solid var(--pj-line);padding:26px 0 40px;color:#94a3b8}
+  </style>
+  <!-- Chart.js (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="pj-header">
+    <div class="pj-container pj-nav">
+      <div class="pj-brand">
+        <div class="pj-logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="4" height="10" />
+            <rect x="10" y="7" width="4" height="14" />
+            <rect x="17" y="3" width="4" height="18" />
+          </svg>
+        </div>
+        <strong id="pj-projName">Proyecto</strong>
+      </div>
+      <nav class="pj-links">
+        <a href="./index.html">← Volver</a>
+        <span id="pj-sync" class="pj-sync" title="Sincronización activa" aria-label="Sincronización">●</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="pj-hero">
+    <div class="pj-container">
+      <h1 id="pj-title" class="pj-h1">Dashboard</h1>
+      <p id="pj-sub" class="pj-sub">Explora indicadores y gráficos. Los filtros se sincronizan con otras pestañas.</p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="pj-container pj-main">
+    <!-- Sidebar filtros -->
+    <aside class="pj-aside">
+      <h3>Filtros</h3>
+      <form id="pj-filters" class="pj-filters" autocomplete="off">
+        <label>Desde<input type="date" id="pj-from"/></label>
+        <label>Hasta<input type="date" id="pj-to"/></label>
+        <label>Categoría
+          <select id="pj-category">
+            <option value="all">Todas</option>
+            <option value="A">Categoría A</option>
+            <option value="B">Categoría B</option>
+            <option value="C">Categoría C</option>
+          </select>
+        </label>
+        <label>Segmento
+          <select id="pj-segment">
+            <option value="all">Todos</option>
+            <option value="online">Online</option>
+            <option value="store">Tienda</option>
+          </select>
+        </label>
+        <button class="pj-btn pj-btn--primary" type="button" id="pj-reset">Restablecer</button>
+      </form>
+
+      <div class="pj-sidecard">
+        <h4>Acerca del proyecto</h4>
+        <p id="pj-about">Descripción del proyecto y objetivos.</p>
+        <a class="pj-btn" id="pj-github" href="#" target="_blank" rel="noopener">Ver código en GitHub</a>
+      </div>
+    </aside>
+
+    <!-- Área principal -->
+    <section>
+      <div class="pj-kpis">
+        <div class="pj-kpi"><span>Total</span><strong id="pj-kpiTotal">$0</strong></div>
+        <div class="pj-kpi"><span>Promedio</span><strong id="pj-kpiAvg">$0</strong></div>
+        <div class="pj-kpi"><span>Crecimiento</span><strong id="pj-kpiGrowth">0%</strong></div>
+      </div>
+
+      <div class="pj-cards">
+        <article class="pj-card">
+          <h3>Serie temporal</h3>
+          <canvas id="pj-chLine" height="220" aria-label="Serie temporal" role="img"></canvas>
+        </article>
+        <article class="pj-card">
+          <h3>Ventas por categoría</h3>
+          <canvas id="pj-chBar" height="220" aria-label="Ventas por categoría" role="img"></canvas>
+        </article>
+        <article class="pj-card">
+          <h3>Segmento</h3>
+          <canvas id="pj-chPie" height="220" aria-label="Segmentos" role="img"></canvas>
+        </article>
+        <article class="pj-card">
+          <h3>Top productos</h3>
+          <div class="pj-tablewrap">
+            <table id="pj-table" aria-label="Top productos">
+              <thead><tr><th>Producto</th><th>Ventas</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="pj-footer">
+    <div class="pj-container">
+      <small>© <span id="pj-year"></span> Alexis Samboy — Dashboard</small>
+    </div>
+  </footer>
+
+  <!-- LÓGICA DEL DASHBOARD (encapsulada) -->
+  <script>
+    (function(){
+      const $ = s => document.querySelector(s);
+      const fmt = n => Number(n).toLocaleString('es-DO');
+
+      // ========= Datos demo =========
+      const DATASETS = {
+        ventas: {
+          name: "Análisis de Ventas con Power BI y Excel",
+          about: "KPIs de ingresos, márgenes y top productos por región y canal.",
+          github: "https://github.com/tu-usuario/ventas-powerbi",
+          series: genSeries("2025-01-01", 150, 120),
+          byCat: { A: 420, B: 360, C: 260 },
+          bySeg: { online: 62, store: 38 },
+          products: [["Producto A", 195],["Producto B", 170],["Producto C", 150],["Producto D", 130],["Producto E", 95]]
+        },
+        eda: {
+          name: "Exploración de Datos con Python y Pandas",
+          about: "EDA, limpieza y visualización. Correlaciones y distribución.",
+          github: "https://github.com/tu-usuario/eda-pandas",
+          series: genSeries("2025-02-01", 90, 70),
+          byCat: { A: 120, B: 80, C: 60 },
+          bySeg: { online: 70, store: 30 },
+          products: [["Var A", 120],["Var B", 95],["Var C", 80],["Var D", 70],["Var E", 55]]
+        },
+        clientes: {
+          name: "Dashboard de Clientes con SQL y Tableau",
+          about: "Cohortes, retención y LTV. CTEs y ventanas.",
+          github: "https://github.com/tu-usuario/sql-tableau-clientes",
+          series: genSeries("2025-01-15", 110, 90),
+          byCat: { A: 210, B: 230, C: 260 },
+          bySeg: { online: 55, store: 45 },
+          products: [["Plan Básico", 160],["Plan Plus", 140],["Plan Pro", 95],["Addon X", 70],["Addon Y", 48]]
+        }
+      };
+      function genSeries(startDate, base, amp){
+        const arr = [], start = new Date(startDate);
+        for(let i=0;i<120;i++){
+          const d = new Date(start); d.setDate(start.getDate()+i);
+          arr.push({ date: d.toISOString().slice(0,10), value: Math.max(20, Math.round(base + Math.sin(i/7)*amp + (Math.random()*20-10))) });
+        }
+        return arr;
+      }
+
+      // ========= Estado inicial =========
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id') || 'ventas';
+      const proj = DATASETS[id] || DATASETS['ventas'];
+      const stateKey = 'as-project-state-'+id;
+
+      $('#pj-projName').textContent = id.toUpperCase();
+      $('#pj-title').textContent = proj.name;
+      $('#pj-sub').textContent = "Filtros sincronizados entre pestañas y guardados para futuras visitas.";
+      $('#pj-about').textContent = proj.about;
+      $('#pj-github').href = proj.github;
+      $('#pj-year').textContent = new Date().getFullYear();
+
+      const defaultRange = { from: proj.series[0].date, to: proj.series.at(-1).date, category:'all', segment:'all' };
+      let state = loadStateFromURL() || JSON.parse(localStorage.getItem(stateKey) || 'null') || defaultRange;
+
+      $('#pj-from').value = state.from;
+      $('#pj-to').value = state.to;
+      $('#pj-category').value = state.category;
+      $('#pj-segment').value = state.segment;
+
+      applyURL();
+
+      // ========= Gráficas =========
+      let chLine, chBar, chPie;
+
+      function buildCharts(){
+        const rows = proj.series.filter(r => r.date>=state.from && r.date<=state.to);
+
+        const total = rows.reduce((a,b)=>a+b.value,0);
+        const avg   = total / Math.max(1, rows.length);
+        const growth = rows.length>=2 ? ((rows.at(-1).value/rows.at(0).value)-1)*100 : 0;
+        $('#pj-kpiTotal').textContent = '$' + fmt(total);
+        $('#pj-kpiAvg').textContent = '$' + fmt(Math.round(avg));
+        $('#pj-kpiGrowth').textContent = (growth>=0?'+':'') + growth.toFixed(1) + '%';
+
+        chLine?.destroy();
+        chLine = new Chart($('#pj-chLine').getContext('2d'), {
+          type:'line',
+          data:{ labels: rows.map(r=>r.date), datasets:[{ data: rows.map(r=>r.value), borderColor:'rgba(34,211,238,1)', backgroundColor:'rgba(34,211,238,.25)', fill:true, tension:.35, pointRadius:0 }]},
+          options:{ responsive:true, animation:{duration:800,easing:'easeOutQuart'}, plugins:{legend:{display:false}}, scales:{ x:{grid:{color:'#334155'},ticks:{color:'#9CA3AF'}}, y:{grid:{color:'#334155'},ticks:{color:'#9CA3AF'},beginAtZero:true}}}
+        });
+
+        const catData = { ...proj.byCat };
+        if(state.category !== 'all'){
+          Object.keys(catData).forEach(k=>{ if(k!==state.category) catData[k]=Math.round(catData[k]*.6); });
+        }
+        chBar?.destroy();
+        chBar = new Chart($('#pj-chBar').getContext('2d'), {
+          type:'bar',
+          data:{ labels:Object.keys(catData), datasets:[{ data:Object.values(catData), backgroundColor:'rgba(34,211,238,.25)', borderColor:'rgba(34,211,238,1)' }]},
+          options:{ responsive:true, animation:{duration:800,easing:'easeOutQuart'}, plugins:{legend:{display:false}}, scales:{ x:{grid:{color:'#334155'},ticks:{color:'#9CA3AF'}}, y:{grid:{color:'#334155'},ticks:{color:'#9CA3AF'},beginAtZero:true}}}
+        });
+
+        const segData = { ...proj.bySeg };
+        if(state.segment !== 'all'){
+          Object.keys(segData).forEach(k=>{ if(k!==state.segment) segData[k]=Math.round(segData[k]*.5); });
+        }
+        chPie?.destroy();
+        chPie = new Chart($('#pj-chPie').getContext('2d'), {
+          type:'doughnut',
+          data:{ labels:Object.keys(segData), datasets:[{ data:Object.values(segData), backgroundColor:['rgba(34,211,238,1)','rgba(96,165,250,1)','rgba(2,132,199,1)'], borderColor:'#0b1220', borderWidth:2 }]},
+          options:{ cutout:'62%', plugins:{legend:{display:false}}, animation:{animateRotate:true, duration:900,easing:'easeOutQuart'} }
+        });
+
+        const tbody = $('#pj-table tbody'); tbody.innerHTML = '';
+        proj.products.forEach(([name,val])=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>'+name+'</td><td>$'+fmt(val)+'</td>';
+          tbody.appendChild(tr);
+        });
+      }
+
+      // ========= Eventos filtros =========
+      $('#pj-filters').addEventListener('input', ()=>{
+        state.from = $('#pj-from').value;
+        state.to = $('#pj-to').value;
+        state.category = $('#pj-category').value;
+        state.segment = $('#pj-segment').value;
+        persist(); applyURL(); broadcast(); buildCharts();
+      });
+      $('#pj-reset').addEventListener('click', ()=>{
+        state = { ...defaultRange };
+        $('#pj-from').value = state.from; $('#pj-to').value = state.to;
+        $('#pj-category').value = 'all'; $('#pj-segment').value = 'all';
+        persist(); applyURL(); broadcast(); buildCharts();
+      });
+
+      // ========= Persistencia & URL =========
+      function persist(){ localStorage.setItem(stateKey, JSON.stringify(state)); }
+      function applyURL(){
+        const q = new URLSearchParams({ id, from:state.from, to:state.to, category:state.category, segment:state.segment });
+        history.replaceState(null,'','?'+q.toString());
+      }
+      function loadStateFromURL(){
+        const p = new URLSearchParams(location.search);
+        const f = p.get('from'), t = p.get('to'), c = p.get('category'), s = p.get('segment');
+        if(!f && !t && !c && !s) return null;
+        return { from: f || defaultRange.from, to: t || defaultRange.to, category: c || 'all', segment: s || 'all' };
+      }
+
+      // ========= Sync entre pestañas =========
+      let bc = null;
+      try{ if('BroadcastChannel' in window) bc = new BroadcastChannel('as-sync'); }catch(e){ bc = null; }
+      function broadcast(){
+        const msg = { type:'filters', id, state, ts: Date.now() };
+        if(bc) bc.postMessage(msg);
+        else localStorage.setItem('as-sync-fallback', JSON.stringify(msg)); // dispara 'storage'
+      }
+      function onReceive(msg){
+        if(!msg || msg.id !== id) return;
+        if(JSON.stringify(msg.state) === JSON.stringify(state)) return;
+        state = { ...msg.state };
+        $('#pj-from').value = state.from; $('#pj-to').value = state.to;
+        $('#pj-category').value = state.category; $('#pj-segment').value = state.segment;
+        persist(); applyURL(); buildCharts();
+        const s = $('#pj-sync'); s.classList.remove('pulse'); void s.offsetWidth; s.classList.add('pulse');
+      }
+      if(bc){ bc.onmessage = e => onReceive(e.data); }
+      window.addEventListener('storage', e=>{
+        if(e.key === 'as-sync-fallback'){ try{ onReceive(JSON.parse(e.newValue)); }catch(_){ } }
+      });
+
+      // ========= Init =========
+      buildCharts();
+    })();
+  </script>
+</body>
+</html>
