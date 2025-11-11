@@ -1,119 +1,160 @@
-// ===== Datos de proyectos (ejemplo) =====
+/* ====== DATA (ejemplos) ======
+   Coloca tus MP4 o GIF en /assets/media/ y actualiza las rutas.
+*/
 const PROJECTS = [
   {
-    id:'p1',
-    title:'Análisis de Ventas con Power BI y Excel',
-    description:'KPIs de ingresos, márgenes y top productos por categoría y región.',
-    tags:['Power BI','Excel','DAX','ETL'],
-    github:'https://github.com/tu-usuario/ventas-powerbi',
-    chart:{ type:'bar', labels:['Q1','Q2','Q3','Q4'], data:[420,560,610,710] }
+    id: "ventas-bi",
+    title: "Análisis de Ventas — Power BI + Excel",
+    desc: "KPIs, serie temporal y desglose por categoría. Flujo ETL en Excel y modelo de datos simple.",
+    tags: ["Power BI", "Excel", "DAX", "ETL", "KPI"],
+    // Cambia por tus archivos locales:
+    preview: "./assets/media/ventas-bi.mp4",
+    poster: "./assets/media/ventas-bi_poster.jpg",
+    github: "https://github.com/AlexisSamboy/proyecto_powerbi",
+    readme: "https://github.com/AlexisSamboy/proyecto_powerbi#readme"
   },
   {
-    id:'p2',
-    title:'Exploración de Datos con Python y Pandas',
-    description:'Limpieza, EDA y visualización de patrones. Métricas de distribución.',
-    tags:['Python','pandas','matplotlib'],
-    github:'https://github.com/tu-usuario/eda-pandas',
-    chart:{ type:'line', labels:['Ene','Feb','Mar','Abr','May','Jun'], data:[12,19,15,23,28,31] }
+    id: "churn-py",
+    title: "Exploración de Churn — Python + pandas",
+    desc: "EDA, limpieza, cohortes y baseline de clasificación (Regresión Logística).",
+    tags: ["Python", "pandas", "EDA", "ML"],
+    preview: "./assets/media/churn_py.mp4",
+    poster: "./assets/media/churn_py_poster.jpg",
+    github: "https://github.com/AlexisSamboy/proyecto_churn",
+    readme: "https://github.com/AlexisSamboy/proyecto_churn#readme"
   },
   {
-    id:'p3',
-    title:'Dashboard de Clientes con SQL y Tableau',
-    description:'Cohortes, retención y LTV. Consultas con CTEs y funciones ventana.',
-    tags:['SQL','CTE','Tableau'],
-    github:'https://github.com/tu-usuario/sql-tableau-clientes',
-    chart:{ type:'doughnut', labels:['Activos','Inactivos','Nuevos'], data:[62,23,15] }
+    id: "clientes-sql",
+    title: "Consultas de Clientes — SQL",
+    desc: "CTEs, ventanas y KPIs de clientes. Scripts reproducibles con datos de ejemplo.",
+    tags: ["SQL", "MySQL", "KPIs"],
+    // Si no tienes aún el media, deja vacío para ver el fallback:
+    preview: "",
+    poster: "./assets/media/sql_poster.jpg",
+    github: "https://github.com/AlexisSamboy/proyecto_sql",
+    readme: "https://github.com/AlexisSamboy/proyecto_sql#readme"
   }
 ];
 
-// ===== Helper SVG (GitHub) =====
-const GH_ICON = `
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M12 2a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.2-3.37-1.2-.45-1.17-1.1-1.48-1.1-1.48-.9-.63.07-.62.07-.62 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.9.83.09-.64.35-1.09.64-1.34-2.22-.26-4.56-1.11-4.56-4.93 0-1.09.39-1.98 1.03-2.68-.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.02a9.58 9.58 0 015 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.4.2 2.44.1 2.7.64.7 1.03 1.59 1.03 2.68 0 3.83-2.34 4.66-4.57 4.92.36.31.68.92.68 1.86v2.75c0 .27.18.58.69.48A10 10 0 0012 2z"/>
-  </svg>`;
+/* ====== RENDER ====== */
+const $ = (s, sc=document) => sc.querySelector(s);
+const $$ = (s, sc=document) => [...sc.querySelectorAll(s)];
+const cardsMount = $("#cards");
 
-// ===== Render de tarjetas =====
-const grid = document.getElementById('cards');
-grid.innerHTML = PROJECTS.map(p => `
-  <article class="card reveal" id="${p.id}">
-    <div class="card-head">
-      <h3>${p.title}</h3>
-      <p class="desc">${p.description}</p>
-      <div class="chips" aria-label="Tecnologías">
-        ${p.tags.map(t=>`<span class="chip">${t}</span>`).join('')}
+function tagHtml(t){ return `<span class="pj-tag">${t}</span>`; }
+
+function mediaHtml(item){
+  // Video si hay preview; si no, poster; si tampoco, fallback.
+  if (item.preview) {
+    return `
+      <div class="pj-media">
+        <video muted autoplay playsinline loop preload="metadata"
+               ${item.poster ? `poster="${item.poster}"` : ""}>
+          <source src="${item.preview}" type="video/mp4"/>
+        </video>
+      </div>`;
+  }
+  if (item.poster) {
+    return `<div class="pj-media"><img src="${item.poster}" alt=""></div>`;
+  }
+  return `<div class="pj-media pj-empty">Preview no disponible</div>`;
+}
+
+function cardHtml(item){
+  return `
+  <article class="pj-card" data-tags="${item.tags.join(",")}">
+    ${mediaHtml(item)}
+    <div class="pj-body">
+      <h3 class="pj-title">${item.title}</h3>
+      <p class="pj-desc">${item.desc}</p>
+      <div class="pj-tags">${item.tags.map(tagHtml).join("")}</div>
+      <div class="pj-actions">
+        <a href="#" class="btn" data-open="${item.id}">Vista previa</a>
+        <a href="${item.github}" target="_blank" rel="noopener" class="btn btn--ghost">GitHub</a>
       </div>
     </div>
-    <div class="chart-wrap">
-      <canvas id="chart-${p.id}" width="400" height="210" aria-label="Gráfico del proyecto ${p.title}" role="img"></canvas>
-    </div>
-    <div class="card-foot">
-      <a class="btn" href="${p.github}" target="_blank" rel="noopener">
-        ${GH_ICON} Ver más en GitHub
-      </a>
-    </div>
-  </article>
-`).join('');
+  </article>`;
+}
 
-// ===== Reveal on scroll =====
-const revealEls = document.querySelectorAll('.reveal');
-const ioReveal = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){ e.target.classList.add('in'); ioReveal.unobserve(e.target); }
-  })
-}, { threshold:.12 });
-revealEls.forEach(el=>ioReveal.observe(el));
+function render(list){
+  cardsMount.innerHTML = list.map(cardHtml).join("");
+}
 
-// ===== Crear charts al entrar en viewport =====
-const created = new Set();
-const ioCharts = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting) return;
-    const card = entry.target;
-    const pid = card.id;
-    if(created.has(pid)) return;
+/* ====== BUSCAR / FILTRAR ====== */
+const input = $("#q");
+const chips = $$("#chips .chip");
+let currentFilter = "*";
+let query = "";
 
-    const cfg = PROJECTS.find(p=>p.id===pid);
-    if(!cfg) return;
-    const canvas = document.getElementById(`chart-${pid}`);
-    if(!canvas || !window.Chart) return; // guard por si falla el CDN
-
-    const ctx = canvas.getContext('2d');
-    const border = 'rgba(34,211,238,1)';   // cyan
-    const fill   = 'rgba(34,211,238,.25)';
-    const grid   = '#334155'; const tick='#9CA3AF';
-
-    const baseOpts = {
-      responsive:true,
-      animation:{ duration:900, easing:'easeOutQuart' },
-      scales:{
-        x:{ grid:{color:grid}, ticks:{color:tick} },
-        y:{ grid:{color:grid}, ticks:{color:tick}, beginAtZero:true }
-      },
-      plugins:{ legend:{ display:false }, tooltip:{ enabled:true } }
-    };
-
-    if(cfg.chart.type==='bar'){
-      new Chart(ctx,{ type:'bar',
-        data:{ labels:cfg.chart.labels, datasets:[{ data:cfg.chart.data, backgroundColor:fill, borderColor:border, borderWidth:1, hoverBackgroundColor:'rgba(34,211,238,.4)'}]},
-        options: baseOpts
-      });
-    }else if(cfg.chart.type==='line'){
-      new Chart(ctx,{ type:'line',
-        data:{ labels:cfg.chart.labels, datasets:[{ data:cfg.chart.data, borderColor:border, backgroundColor:fill, fill:true, tension:.35, pointRadius:0 }]},
-        options: baseOpts
-      });
-    }else if(cfg.chart.type==='doughnut'){
-      new Chart(ctx,{ type:'doughnut',
-        data:{ labels:cfg.chart.labels, datasets:[{ data:cfg.chart.data, backgroundColor:[border,'rgba(96,165,250,1)','rgba(2,132,199,1)'], borderColor:'#0b1220', borderWidth:2 }]},
-        options:{ cutout:'62%', plugins:{ legend:{ display:false }}, animation:{ animateRotate:true, duration:1000, easing:'easeOutQuart' } }
-      });
-    }
-
-    created.add(pid);
-    ioCharts.unobserve(card);
+function applyFilters(){
+  const q = query.toLowerCase();
+  const filtered = PROJECTS.filter(p => {
+    const matchesText = !q || (p.title+ " " + p.desc + " " + p.tags.join(" ")).toLowerCase().includes(q);
+    const matchesTag = currentFilter === "*" || p.tags.includes(currentFilter);
+    return matchesText && matchesTag;
   });
-}, { threshold:.35 });
-document.querySelectorAll('.card').forEach(c=>ioCharts.observe(c));
+  render(filtered);
+}
 
-// Año en footer
-const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+input.addEventListener("input", e => { query = e.target.value.trim(); applyFilters(); });
+
+chips.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    chips.forEach(x=>x.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    currentFilter = btn.dataset.filter;
+    applyFilters();
+  });
+});
+
+/* ====== MODAL ====== */
+const modal = $("#pj-modal");
+const mMedia = $("#pjm-media");
+const mTitle = $("#pjm-title");
+const mDesc  = $("#pjm-desc");
+const mTags  = $("#pjm-tags");
+const mGit   = $("#pjm-github");
+const mRead  = $("#pjm-readme");
+
+function openModal(id){
+  const p = PROJECTS.find(x => x.id === id);
+  if(!p) return;
+
+  // Media en modal (igual lógica que en card)
+  mMedia.innerHTML = p.preview
+    ? `<video muted autoplay playsinline loop controls preload="metadata" ${p.poster ? `poster="${p.poster}"` : ""}>
+         <source src="${p.preview}" type="video/mp4"/>
+       </video>`
+    : (p.poster ? `<img src="${p.poster}" alt="">` : `<div class="pj-empty" style="height:100%">Preview no disponible</div>`);
+
+  mTitle.textContent = p.title;
+  mDesc.textContent  = p.desc;
+  mTags.innerHTML    = p.tags.map(tagHtml).join("");
+  mGit.href = p.github || "#";
+  mRead.href = p.readme || p.github || "#";
+
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal(){
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+  mMedia.innerHTML = "";
+}
+
+document.addEventListener("click", e=>{
+  const openBtn = e.target.closest("[data-open]");
+  if(openBtn){
+    e.preventDefault();
+    openModal(openBtn.dataset.open);
+  }
+  if(e.target.matches("[data-close]")) closeModal();
+});
+
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape") closeModal();
+});
+
+/* ====== INIT ====== */
+render(PROJECTS);

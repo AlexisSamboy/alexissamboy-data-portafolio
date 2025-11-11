@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proyectos Interactivos — Alexis Samboy</title>
+  <meta name="description" content="Galería de proyectos con previews GIF/MP4 y enlaces directos a GitHub." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#0a0f1a;         /* fondo */
+      --panel:#0f172a;      /* panel oscuro */
+      --card:#0b1220;       /* tarjeta */
+      --text:#e5e7eb;       /* texto principal */
+      --muted:#9ca3af;      /* texto suave */
+      --line:#334155;       /* bordes */
+      --acc:#22d3ee;        /* cian */
+      --acc-2:#60a5fa;      /* azul */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% -10%, #0b1220 0%, var(--bg) 60%);
+      background-color:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit}
+    .container{width:min(1200px,92vw);margin-inline:auto}
+    header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(15,23,42,.6);
+      backdrop-filter:blur(6px);
+      border-bottom:1px solid var(--line);
+    }
+    header .wrap{
+      display:flex;align-items:center;justify-content:space-between;
+      height:64px;gap:16px
+    }
+    .back{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--muted);text-decoration:none
+    }
+    .title{
+      font-size:clamp(24px,3vw,40px);
+      font-weight:800;letter-spacing:-.02em;margin:24px 0 8px
+    }
+    .subtitle{color:var(--muted);margin:0 0 22px}
+    .toolbar{
+      display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:18px
+    }
+    .search{
+      flex:1 1 340px;display:flex;align-items:center;
+      background:var(--panel);border:1px solid var(--line);
+      border-radius:14px;padding:10px 12px;color:var(--text)
+    }
+    .search input{
+      background:transparent;outline:none;border:0;color:var(--text);
+      width:100%;font-size:14px
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chip{
+      border:1px solid var(--line);color:#cbd5e1;background:#0b1220;
+      padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer
+    }
+    .chip.active{background:rgba(34,211,238,.18);border-color:#0891b2;color:#a5f3fc}
+    /* Grid */
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(1,minmax(0,1fr))}
+    @media (width>=720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (width>=1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .card{
+      background:rgba(11,18,32,.6);border:1px solid var(--line);
+      border-radius:18px;overflow:hidden;display:flex;flex-direction:column
+    }
+    .cover{
+      aspect-ratio:16/9;background:#0b1220 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width=\"800\" height=\"450\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\"><stop stop-color=\"%2309c\" offset=\"0\"/><stop stop-color=\"%2355f\" offset=\"1\"/></linearGradient></defs><rect width=\"100%\" height=\"100%\" fill=\"%230b1220\"/><circle cx=\"400\" cy=\"225\" r=\"220\" fill=\"url(%23g)\" fill-opacity=\"0.18\"/></svg>') center/cover no-repeat;
+    }
+    .card .body{padding:14px 14px 16px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+    .tag{
+      font-size:11px;border:1px solid var(--line);border-radius:999px;
+      padding:4px 8px;color:#cbd5e1;background:#0b1220
+    }
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      border:1px solid var(--line);background:#0b1220;
+      color:var(--text);padding:9px 12px;border-radius:12px;
+      cursor:pointer;font-size:14px
+    }
+    .btn:hover{background:#111827}
+    .btn-primary{
+      background:var(--acc-2);border-color:transparent;color:#0b1220;font-weight:600
+    }
+    .btn-primary:hover{filter:brightness(1.05)}
+    /* Modal */
+    .modal{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(2,6,23,.78);backdrop-filter:blur(2px);z-index:9999
+    }
+    .modal.open{display:grid}
+    .modal__box{
+      width:min(1200px,92vw);aspect-ratio:16/9;background:var(--panel);
+      border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;
+      box-shadow:0 30px 80px rgba(0,0,0,.55)
+    }
+    .modal__media{width:100%;height:100%;object-fit:contain;display:block;background:#0b1220}
+    .modal__close{
+      position:absolute;top:10px;right:10px;border:1px solid var(--line);
+      background:#0b1220;color:var(--text);padding:6px 10px;border-radius:10px;
+      font-size:14px;cursor:pointer
+    }
+    .modal__close:hover{background:#111827}
+    footer{color:var(--muted);font-size:13px;margin:30px 0 60px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container wrap">
+      <a class="back" href="index.html">← Volver</a>
+      <div style="width:24px"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1 class="title">Proyectos Interactivos</h1>
+    <p class="subtitle">Previews en <strong>GIF/MP4</strong> y enlaces directos a <strong>GitHub</strong> (código, datasets, notebooks, README).</p>
+
+    <!-- Herramientas: búsqueda + chips -->
+    <div class="toolbar">
+      <label class="search" aria-label="Buscar proyectos">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="margin-right:8px;opacity:.7">
+          <path d="M21 21l-4.3-4.3m2.3-5.2a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input id="q" type="search" placeholder="Buscar por nombre o descripción…" autocomplete="off" />
+      </label>
+      <div class="chips" id="chips">
+        <button class="chip active" data-tag="Todos">Todos</button>
+        <button class="chip" data-tag="Power BI">Power BI</button>
+        <button class="chip" data-tag="Excel">Excel</button>
+        <button class="chip" data-tag="DAX">DAX</button>
+        <button class="chip" data-tag="ETL">ETL</button>
+        <button class="chip" data-tag="Python">Python</button>
+        <button class="chip" data-tag="pandas">pandas</button>
+        <button class="chip" data-tag="SQL">SQL</button>
+        <button class="chip" data-tag="MySQL">MySQL</button>
+        <button class="chip" data-tag="KPIs">KPIs</button>
+        <button class="chip" data-tag="ML">ML</button>
+      </div>
+    </div>
+
+    <!-- Grid de tarjetas -->
+    <section id="grid" class="grid" aria-live="polite">
+      <!-- Proyecto 1 -->
+      <article class="card" data-name="Análisis de Ventas — Power BI + Excel" data-desc="KPIs, serie temporal y desglose por categoría. Flujo ETL en Excel y modelo de datos simple." data-tags="Power BI,Excel,DAX,ETL,KPIs">
+        <div class="cover" style="background-image:url('./assets/img/ventas-poster.jpg');background-size:cover;background-position:center;"></div>
+        <div class="body">
+          <h3 style="margin:0 0 6px;font-size:18px">Análisis de Ventas — Power BI + Excel</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">KPIs, serie temporal y desglose por categoría. Flujo ETL en Excel y modelo de datos simple.</p>
+          <div class="meta">
+            <span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">DAX</span><span class="tag">ETL</span><span class="tag">KPI</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary btn-preview" data-type="video" data-src="./assets/previews/ventas.mp4">Vista previa</button>
+            <a class="btn" href="https://github.com/TU_USUARIO/ventas-powerbi" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Proyecto 2 -->
+      <article class="card" data-name="Exploración de Churn — Python + pandas" data-desc="EDA, limpieza, cohortes y baseline de clasificación (Regresión Logística)." data-tags="Python,pandas,EDA,ML">
+        <div class="cover" style="background-image:url('./assets/img/churn-poster.jpg');background-size:cover;background-position:center;"></div>
+        <div class="body">
+          <h3 style="margin:0 0 6px;font-size:18px">Exploración de Churn — Python + pandas</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">EDA, limpieza, cohortes y baseline de clasificación (Regresión Logística).</p>
+          <div class="meta">
+            <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">EDA</span><span class="tag">ML</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary btn-preview" data-type="gif" data-src="./assets/previews/churn.gif">Vista previa</button>
+            <a class="btn" href="https://github.com/TU_USUARIO/proyecto-churn" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Proyecto 3 -->
+      <article class="card" data-name="Consultas de Clientes — SQL" data-desc="CTEs, ventanas y KPIs de clientes. Scripts reproducibles con datos de ejemplo." data-tags="SQL,MySQL,KPIs">
+        <div class="cover" style="background-image:url('./assets/img/clientes-sql-poster.jpg');background-size:cover;background-position:center;"></div>
+        <div class="body">
+          <h3 style="margin:0 0 6px;font-size:18px">Consultas de Clientes — SQL</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">CTEs, ventanas y KPIs de clientes. Scripts reproducibles con datos de ejemplo.</p>
+          <div class="meta">
+            <span class="tag">SQL</span><span class="tag">MySQL</span><span class="tag">KPIs</span>
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary btn-preview" data-type="video" data-src="./assets/previews/clientes-sql.mp4">Vista previa</button>
+            <a class="btn" href="https://github.com/TU_USUARIO/clientes-sql" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer>© <span id="y"></span> Alexis Samboy • Previews locales (GIF/MP4) + enlaces a GitHub.</footer>
+  </main>
+
+  <!-- Modal global de preview -->
+  <div id="preview-modal" class="modal" aria-hidden="true" role="dialog" aria-label="Vista previa del proyecto">
+    <div class="modal__box" role="document">
+      <!-- Contenido multimedia se inyecta aquí -->
+      <button class="modal__close" type="button" aria-label="Cerrar (Esc)">✕ Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    // Año en footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // ---------- FILTROS ----------
+    (function(){
+      const grid = document.getElementById('grid');
+      const cards = [...grid.querySelectorAll('.card')];
+      const q = document.getElementById('q');
+      const chips = document.getElementById('chips');
+      let activeTag = 'Todos';
+
+      function applyFilter(){
+        const text = (q.value || '').toLowerCase().trim();
+        cards.forEach(card=>{
+          const name = (card.dataset.name||'').toLowerCase();
+          const desc = (card.dataset.desc||'').toLowerCase();
+          const tags = (card.dataset.tags||'').toLowerCase();
+          const matchText = !text || name.includes(text) || desc.includes(text);
+          const matchTag = activeTag==='Todos' || tags.split(',').map(s=>s.trim()).includes(activeTag.toLowerCase());
+          card.style.display = (matchText && matchTag) ? '' : 'none';
+        });
+      }
+
+      q.addEventListener('input', applyFilter);
+
+      chips.addEventListener('click', (e)=>{
+        const btn = e.target.closest('.chip'); if(!btn) return;
+        chips.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+        btn.classList.add('active');
+        activeTag = btn.dataset.tag;
+        applyFilter();
+      });
+    })();
+
+    // ---------- MODAL PREVIEW (GIF/MP4) ----------
+    (function () {
+      const modal = document.getElementById('preview-modal');
+      const box   = modal.querySelector('.modal__box');
+      const closeBtn = modal.querySelector('.modal__close');
+
+      function openPreview({ src, type }) {
+        const old = box.querySelector('.modal__media');
+        if (old) old.remove();
+
+        let media;
+        if (type === 'video') {
+          media = document.createElement('video');
+          media.src = src;
+          media.className = 'modal__media';
+          media.controls = true;
+          media.muted = true;
+          media.autoplay = true;
+          media.playsInline = true;
+          media.preload = 'metadata';
+          media.setAttribute('controlsList', 'nodownload noplaybackrate');
+        } else {
+          media = new Image();
+          media.src = src;
+          media.alt = 'Vista previa';
+          media.className = 'modal__media';
+          media.decoding = 'async';
+        }
+        box.insertBefore(media, closeBtn);
+
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+
+      function closePreview() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        const old = box.querySelector('.modal__media');
+        if (old && old.nodeName === 'VIDEO') { old.pause(); old.src=''; }
+      }
+
+      // Delegación: cualquier .btn-preview abre modal
+      document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-preview');
+        if (!btn) return;
+        e.preventDefault(); e.stopPropagation();
+        openPreview({
+          src: btn.dataset.src,
+          type: (btn.dataset.type || 'video').toLowerCase()
+        });
+      });
+
+      // Cerrar por botón, overlay o Esc
+      closeBtn.addEventListener('click', closePreview);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closePreview(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closePreview();
+      });
+
+      // Pequeño focus-trap (primero/último elemento foco dentro del modal)
+      modal.addEventListener('keydown', (e)=>{
+        if (e.key !== 'Tab') return;
+        const focusables = [...modal.querySelectorAll('button, [href], video')]
+          .filter(el=>!el.hasAttribute('disabled'));
+        if (!focusables.length) return;
+        const first = focusables[0], last = focusables[focusables.length-1];
+        if (e.shiftKey && document.activeElement === first){ last.focus(); e.preventDefault(); }
+        else if (!e.shiftKey && document.activeElement === last){ first.focus(); e.preventDefault(); }
+      });
+    })();
+  </script>
+</body>
+</html>
