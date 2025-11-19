@@ -2,7 +2,7 @@
 
 Proyecto de análisis de datos y modelado predictivo para identificar **qué perfil de clientes tiene mayor probabilidad de adquirir un depósito a plazo** ofrecido por un banco.
 
-[Abrir en Colab]()
+[Abrir en Colab: ]()
 https://colab.research.google.com/drive/1p33c3wVr_m2uktXDrwvBB6v9mD8k4FmJ?usp=sharing
 
 ---
@@ -62,27 +62,32 @@ Cada registro corresponde a un cliente contactado y contiene:
 
 El análisis se desarrolla por etapas, cada una en un notebook de Colab/Jupyter:
 
-1. **01_limpieza_datos.ipynb**  
+1. **01_limpieza_datos.ipynb**
+   
    - Revisión de tipos de datos.  
    - Tratamiento de valores nulos, outliers y categorías `"unknown"`.  
    - Generación del dataset limpio: `data/processed/datos_limpios.csv`.
 
-2. **02_analisis_exploratorio.ipynb**  
+3. **02_analisis_exploratorio.ipynb**
+   
    - Distribuciones de variables numéricas y categóricas.  
    - Análisis de correlaciones.  
    - Comparación de perfiles entre clientes que dijeron `"yes"` vs `"no"`.
 
-3. **03_modelado_basico.ipynb**  
+4. **03_modelado_basico.ipynb**
+   
    - División entrenamiento/prueba.  
    - Modelos de clasificación (por ejemplo: Regresión Logística, Árboles de Decisión).  
    - Métricas iniciales: accuracy, precisión, recall, F1-score.
 
-4. **04_modelo_final_y_metricas.ipynb**  
+6. **04_modelo_final_y_metricas.ipynb**
+   
    - Ajuste del mejor modelo.  
    - Importancia de variables.  
    - Interpretación de resultados desde el punto de vista de negocio.
 
-5. **(Opcional) 05_preparacion_para_dashboard.ipynb**  
+8. **05_preparacion_para_dashboard.ipynb**
+   
    - Creación de un dataset resumen para usar en Power BI o Excel.  
 
 ---
