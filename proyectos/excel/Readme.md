@@ -1,6 +1,6 @@
-# 🗄️ Proyectos SQL — Alexis Samboy
+# 📗 Proyectos en Excel — Alexis Samboy
 
-En esta carpeta recopilo consultas y análisis realizados con **MySQL**, centrados en obtener información práctica para la toma de decisiones.
+Esta sección incluye **dashboards y análisis realizados en Microsoft Excel**, usando funciones avanzadas, tablas dinámicas, segmentadores y gráficos interactivos.
 
 ---
 
@@ -8,16 +8,16 @@ En esta carpeta recopilo consultas y análisis realizados con **MySQL**, centrad
 
 | Proyecto | Descripción | Archivo |
 |-----------|--------------|----------|
-| **Consultas de Ventas** | Consultas que identifican productos más vendidos, clientes frecuentes y temporadas altas. | [`consultas_ventas.sql`](./consultas_ventas.sql) |
-| **Base de Clientes** | Creación y manejo de tablas relacionales. | [`clientes_db.sql`](./clientes_db.sql) |
+| **Análisis de Ventas 2025** | Dashboard con segmentación por región, producto y período. | [`ventas_dashboard.xlsx`](./ventas_dashboard.xlsx) |
+| **Clientes Activos** | Seguimiento de clientes por comportamiento mensual y retención. | [`clientes_activos.xlsx`](./clientes_activos.xlsx) |
 
 ---
 
 ## 🧩 Habilidades aplicadas
-- Consultas SELECT, JOIN, GROUP BY  
-- Creación y relación de tablas  
-- Cálculos agregados  
-- Limpieza y filtrado de datos  
+- Tablas dinámicas  
+- Segmentadores y gráficos dinámicos  
+- KPI Cards  
+- Formato condicional avanzado  
 
----
+
 
