@@ -1,0 +1,113 @@
+USE VENTAS
+
+SELECT * FROM YTProducto
+
+-- Explorando el SET de datos
+
+select * from YTVentas
+
+-- Filtrando algunas columnas
+select 
+FECHA,
+PRECIO,
+CIUDAD
+from YTVentas
+
+--Renombrado de algunas columnas
+
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad
+FROM YTVentas
+
+-- Creando columnas calculadas
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad,
+cantidad * precio as 'Total'
+FROM YTVentas
+
+--Ordenar los resultados de mayor total al menor
+
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad,
+cantidad * precio as 'Total'
+FROM YTVentas
+ORDER BY 'Total' desc
+
+--Filtrar los datos que tengan solo id = 1
+
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad,
+cantidad * precio as 'Total'
+FROM YTVentas
+WHERE Id_producto = 1
+ORDER BY 'Total' desc
+
+--Filtrar los datos que tengan solo id = 1 o 2
+
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad,
+cantidad * precio as 'Total'
+FROM YTVentas
+WHERE Id_producto = 1 or Id_producto = 2
+ORDER BY 'Total' desc
+
+--Filtrar los datos que tengan (1,2,3, y 4)
+
+SELECT 
+Id_producto as 'Codigo_Producto',
+fecha,
+precio as 'precio_unitario',
+Cantidad,
+cantidad * precio as 'Total'
+FROM YTVentas
+WHERE Id_producto in (1,2,3,4)
+ORDER BY 'Total' desc
+
+--Filtrar los datos que sean de Tiendas y Pagos de Tarjeta de Credito
+
+SELECT * FROM YTVentas
+WHERE [Tipo de Compra] = 'Tienda' and [Método de Pago] = ' Tarjeta de Credito'
+
+-- Consulta de tabla Gerentes
+
+SELECT * FROM YTGerente
+
+-- Buscar Gerente el cual sea apellido perez
+
+SELECT * FROM YTGerente
+WHERE Gerente like '%Perez'
+
+-- Buscar Gerente el cual su nombre y apellido tenga la letra "A"
+
+SELECT * FROM YTGerente
+WHERE Gerente like '%a%'
+
+-- Buscar Gerente el cual su nombre inicia con la letra  "J"
+
+SELECT * FROM YTGerente
+WHERE Gerente like 'j%'
+
+-- Buscar Gerente el cual su nombre y apellido no contenga la letra "A"
+
+SELECT * FROM YTGerente
+WHERE Gerente not like '%a%'
+
+-- Filtrar los datos dentro de un rango de fecha del 1 al 31 de noviembre del 2022
+
+SELECT * FROM YTVentas
+WHERE fecha between '2022-12-01' and '2022-12-31'
