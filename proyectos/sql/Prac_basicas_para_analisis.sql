@@ -153,3 +153,9 @@ ORDER BY 'Total de ventas' desc
 SELECT * FROM YTVentas
 left join YTProducto on YTVentas.Id_producto = YTVentas.ID_producto
 left join YTGerente on YTVentas.Id_gerente = YTVentas.Id_gerente
+
+--Buscar registro en YTVentas que no tenga un gerente asignado
+
+SELECT * FROM YTVentas
+left join YTProducto on YTVentas.Id_producto = YTVentas.ID_producto
+left join YTGerente on YTVentas.Id_gerente = YTVentas.Id_gerente
