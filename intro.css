@@ -1,0 +1,341 @@
+:root{
+  --bg0:#05060a;
+  --bg1:#070a14;
+  --glass: rgba(255,255,255,.06);
+  --glass2: rgba(255,255,255,.10);
+  --txt: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.70);
+  --blue:#2b6cff;
+  --violet:#7c3aed;
+  --pink:#ff2b6a;
+  --shadow: 0 20px 80px rgba(0,0,0,.45);
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  color:var(--txt);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:
+    radial-gradient(1000px 600px at 30% 20%, rgba(43,108,255,.20), transparent 55%),
+    radial-gradient(900px 600px at 70% 30%, rgba(255,43,106,.14), transparent 55%),
+    radial-gradient(900px 700px at 50% 85%, rgba(124,58,237,.16), transparent 60%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+  overflow:hidden;
+}
+
+.intro{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+}
+
+#fx{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  transform: translateZ(0);
+  will-change: opacity, filter;
+}
+
+.card{
+  position:relative;
+  z-index:2;
+  width:min(520px, 92vw);
+  padding:28px 26px 20px;
+  border-radius:22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  text-align:center;
+  transform: translateY(10px) translateZ(0);
+  opacity:0;
+  animation: popIn 850ms ease-out 160ms forwards;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes popIn{
+  to{ transform: translateY(0) translateZ(0); opacity:1; }
+}
+
+.logo-wrap{
+  width:140px;
+  height:140px;
+  margin: 0 auto 14px;
+  position:relative;
+  display:grid;
+  place-items:center;
+  transform-style:preserve-3d;
+}
+
+/* ✅ NUEVO: halo claro detrás del logo para que el PNG se vea */
+.logo-wrap::before{
+  content:"";
+  position:absolute;
+  width:104px;
+  height:104px;
+  border-radius:999px;
+
+  background:
+    radial-gradient(circle at 30% 20%, rgba(43,108,255,.35), transparent 62%),
+    radial-gradient(circle at 70% 80%, rgba(255,43,106,.22), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.12), rgba(255,255,255,.04) 55%, transparent 72%);
+
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 14px 35px rgba(43,108,255,.18),
+    0 10px 28px rgba(255,43,106,.12);
+
+  z-index: 2;                 /* detrás del logo */
+  transform: translateZ(18px);
+}
+
+/* ✅ ajustado: el logo siempre encima del halo */
+.logo-img, .logo-fallback{
+  width:92px;
+  height:92px;
+  border-radius:18px;
+  object-fit:contain;
+
+  position: relative;
+  z-index: 3;                 /* arriba del halo */
+
+  transform: translateZ(30px);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,.45));
+}
+
+.ring{
+  position:absolute;
+  inset:0;
+  border-radius:999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(43,108,255,.20), transparent 45%),
+    radial-gradient(circle at 70% 80%, rgba(255,43,106,.16), transparent 50%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    0 0 40px rgba(43,108,255,.18),
+    0 0 60px rgba(255,43,106,.12);
+  transform: translateZ(10px);
+  z-index: 1; /* ✅ */
+}
+
+.shine{
+  position:absolute;
+  inset:-6px;
+  border-radius:999px;
+  background: conic-gradient(from 180deg,
+    rgba(43,108,255,.0),
+    rgba(43,108,255,.55),
+    rgba(124,58,237,.4),
+    rgba(255,43,106,.45),
+    rgba(43,108,255,.0)
+  );
+  filter: blur(10px);
+  opacity:.55;
+  animation: spin 2.8s linear infinite;
+  transform: translateZ(0);
+  z-index: 0; /* ✅ */
+}
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
+
+.name{
+  margin: 6px 0 4px;
+  font-size: 26px;
+  letter-spacing:.4px;
+}
+
+.role{
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.typing{
+  display:inline-block;
+  border-right: 2px solid rgba(255,255,255,.55);
+  padding-right: 6px;
+  white-space: nowrap;
+  overflow:hidden;
+}
+
+.actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:center;
+}
+
+.enter{
+  border:0;
+  cursor:pointer;
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: rgba(255,255,255,.95);
+  background: linear-gradient(90deg, rgba(43,108,255,.95), rgba(124,58,237,.9), rgba(255,43,106,.9));
+  box-shadow: 0 12px 30px rgba(43,108,255,.18);
+  font-weight: 650;
+  letter-spacing:.2px;
+  transition: transform .15s ease, filter .15s ease;
+}
+.enter:hover{ transform: translateY(-1px) scale(1.01); filter: brightness(1.05); }
+.enter:active{ transform: translateY(0) scale(.99); }
+
+.hint{
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+}
+
+.progress{
+  margin-top:16px;
+  width:100%;
+  height:8px;
+  border-radius:999px;
+  background: rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.bar{
+  display:block;
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background: linear-gradient(90deg, rgba(43,108,255,.9), rgba(124,58,237,.9), rgba(255,43,106,.9));
+  box-shadow: 0 10px 30px rgba(124,58,237,.22);
+}
+
+.skip{
+  position:absolute;
+  z-index:3;
+  right:16px;
+  bottom:16px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.24);
+  color: rgba(255,255,255,.85);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor:pointer;
+  backdrop-filter: blur(8px);
+}
+
+/* =========================
+   TRANSICIÓN FLUIDA: ARO + OVERLAY + BLUR FINAL
+   (se crea desde JS si no existe en HTML)
+   ========================= */
+
+.page-transition{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.page-transition::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+}
+
+.neon-ring{
+  width: 240px;
+  height: 240px;
+  border-radius: 999px;
+
+  background: conic-gradient(from 120deg,
+    rgba(43,108,255,.98),
+    rgba(124,58,237,.98),
+    rgba(255,43,106,.98),
+    rgba(43,108,255,.98)
+  );
+
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+  mask: radial-gradient(circle, transparent 60%, #000 62%);
+
+  box-shadow:
+    0 0 18px rgba(43,108,255,.35),
+    0 0 28px rgba(124,58,237,.25),
+    0 0 36px rgba(255,43,106,.20);
+
+  transform: translateZ(0) scale(.45);
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+body.is-leaving .page-transition{
+  opacity: 1;
+}
+
+body.is-leaving .page-transition::before{
+  animation: overlayBlur 950ms ease forwards;
+}
+
+body.is-leaving .neon-ring{
+  opacity: 1;
+  animation: ringBurst 950ms cubic-bezier(.16, .84, .18, 1) forwards;
+}
+
+body.is-leaving #fx{
+  animation: fxBlurOut 950ms ease forwards;
+}
+
+body.is-leaving .card{
+  animation: cardZoomBlur 950ms cubic-bezier(.16, .84, .18, 1) forwards;
+}
+
+@keyframes ringBurst{
+  0%   { transform: scale(.45); opacity: 0; filter: blur(.3px); }
+  14%  { opacity: 1; }
+  70%  { transform: scale(3.2); opacity: 1; filter: blur(.1px); }
+  100% { transform: scale(3.9); opacity: 0; filter: blur(0); }
+}
+
+@keyframes overlayBlur{
+  0%,65%{
+    background: rgba(0,0,0,0.0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  100%{
+    background: rgba(0,0,0,.62);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
+
+@keyframes fxBlurOut{
+  0%,70% { opacity: 1; filter: blur(0); }
+  100%   { opacity: .08; filter: blur(12px); }
+}
+
+@keyframes cardZoomBlur{
+  0%   { transform: translateY(0) scale(1) translateZ(0); opacity: 1; filter: blur(0); }
+  60%  { transform: translateY(4px) scale(1.06) translateZ(0); opacity: .95; filter: blur(0); }
+  100% { transform: translateY(8px) scale(1.10) translateZ(0); opacity: 0; filter: blur(10px); }
+}
+
+/* Accesibilidad: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .shine{ animation:none; }
+  .card{ animation:none; opacity:1; transform:none; }
+  .typing{ border-right:none; }
+
+  body.is-leaving .page-transition::before{ animation: none; background: rgba(0,0,0,.65); }
+  body.is-leaving .neon-ring{ animation: none; opacity: 0; }
+  body.is-leaving #fx{ animation: none; opacity: 0.1; }
+  body.is-leaving .card{ animation: none; opacity: 0; }
+}
