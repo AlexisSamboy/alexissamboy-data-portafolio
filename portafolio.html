@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexis Samboy | Data Analyst</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Fondo (canvas) -->
+  <canvas id="canvas3d" aria-hidden="true"></canvas>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo" href="#home">
+        <img src="img/logo-nav.png" alt="Alexis Samboy" />
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#about">Sobre mí</a></li>
+        <li><a href="#experience">Experiencia</a></li>
+        <li><a href="#projects">Proyectos</a></li>
+        <li><a href="#certs">Certificaciones</a></li>
+      </ul>
+
+      <a class="btn-contact" href="#contact">Contactar</a>
+    </div>
+  </nav>
+
+  <!-- HERO (CARD PRO con imagen grande tipo Jacob) -->
+  <header id="home" class="hero-pro">
+    <div class="hero-pro__wrap main-wrapper">
+
+      <div class="hero-pro__card" id="heroCard" aria-label="Portada principal">
+        <!-- BG -->
+        <div class="hero-pro__bg" aria-hidden="true">
+          <img id="heroBgImg" src="img/hero/hero-bg.jpeg" alt="">
+        </div>
+
+        <!-- Sombras/lectura -->
+        <div class="hero-pro__shade" aria-hidden="true"></div>
+
+        <!-- Contenido -->
+        <div class="hero-pro__content">
+
+          <h1 class="hero-pro__name">
+            <span class="name-line">Alexis</span>
+            <span class="name-line">Samboy</span>
+          </h1>
+
+          <h2 class="hero-pro__role">
+            <span class="grad-a">Analista</span> de
+            <span class="grad-b">Datos</span> &amp;
+            <span class="muted">Estratega Digital</span>
+          </h2>
+
+          <p class="hero-pro__desc">
+            Transformo datos complejos en soluciones de negocio claras. Especializado en visualización,
+            análisis, modelado y toma de decisiones basada en evidencia.
+          </p>
+
+          <!-- Tool bubbles (más oscuras para logos SIN fondo) -->
+          <div class="hero-pro__stack" aria-label="Stack principal">
+            <span class="tool-bubble" title="Power BI">
+              <img src="img/tools/power-bi.png" alt="Power BI">
+            </span>
+            <span class="tool-bubble" title="Python">
+              <img src="img/tools/python.png" alt="Python">
+            </span>
+            <span class="tool-bubble" title="SQL">
+              <img src="img/tools/mysql.png" alt="SQL">
+            </span>
+            <span class="tool-bubble" title="Tableau">
+              <img src="img/tools/power-bi.png" alt="power-bi">
+            </span>
+            <span class="tool-bubble" title="Excel">
+              <img src="img/tools/microsoft-excel.png" alt="Excel">
+            </span>
+          </div>
+
+          <div class="hero-pro__cta">
+            <a class="btn btn-hero-primary" href="#projects">
+              Ver Portafolio <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+            <a class="btn btn-hero-ghost" href="docs/Currículum~SD.pdf" download>
+              Descargar CV <i class="fa-solid fa-file-arrow-down"></i>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Hint -->
+        <div class="hero-pro__hint" aria-hidden="true">
+          <span class="dot"></span> Desliza <i class="fa-solid fa-chevron-down"></i>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="main-wrapper">
+
+    <!-- ABOUT -->
+    <section id="about" class="section scroll-reveal">
+      <h2 class="section-title"><span>01.</span> Sobre Mí</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>
+            Soy un apasionado por la tecnología y los datos. Mi enfoque combina la lógica técnica con la creatividad para resolver problemas reales. Disfruto creando
+            <span class="highlight">dashboards interactivos</span> y descubriendo patrones ocultos mediante <span class="highlight">Machine Learning</span>.
+          </p>
+          <p>Aquí algunas tecnologías con las que he estado trabajando recientemente:</p>
+          <ul class="skills-list">
+            <li><i class="fas fa-caret-right"></i> Python (Pandas/NumPy)</li>
+            <li><i class="fas fa-caret-right"></i> SQL (SQL Server)</li>
+            <li><i class="fas fa-caret-right"></i> Power BI</li>
+            <li><i class="fas fa-caret-right"></i> Scikit-Learn</li>
+            <li><i class="fas fa-caret-right"></i> Git & GitHub</li>
+            <li><i class="fas fa-caret-right"></i> Excel (PQuery/VBA)</li>
+          </ul>
+        </div>
+        <div class="about-img">
+          <div class="img-wrapper">
+            <img src="/img/alexis-samboy.jpg" alt="Foto de Alexis Samboy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section scroll-reveal">
+      <h2 class="section-title"><span>02.</span> Trayectoria Profesional</h2>
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3 class="role">Soporte Tecnico Informático <span class="company">Procudaduria de la Republica Dominicana</span></h3>
+            <span class="period">Ago 2025 - Presente</span>
+            <ul>
+              <li>Gestion de incidencias tecnicas asegurando tiempo de respuestas efecientes.</li>
+              <li>Apoyo en la organizacion, resguardo y uso correcto de la informacion Digital.</li>
+              <li>Instalacion y configuracion de software y hardware institucionales.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3 class="role">Soporte Tecnico en sistemas <span class="company">Loteka SRL</span></h3>
+            <span class="period">Jun 2024 - ago 2025</span>
+            <ul>
+              <li>Gestion y mantenimiento de equipos tecnologicos utilizados en operaciones comerciales y financieras.</li>
+              <li>Apoyo en ls validacion de informacion y el funcionamiento de los sistemas de utilizados en las ventas y control de loterias.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STACK MARQUEE -->
+    <div class="stack-marquee" aria-label="Herramientas de análisis de datos">
+      <div class="stack-marquee__shell">
+        <div class="stack-marquee__track" id="stackTrack"></div>
+      </div>
+    </div>
+
+    <!-- PROJECTS (tu carrusel actual intacto) -->
+    <section id="projects" class="projects-showcase">
+      <h2 class="section-title"><span>03.</span> Proyectos Destacados</h2>
+
+      <div class="projects-carousel" id="projectsCarousel">
+        <button class="pc-nav pc-prev" type="button" aria-label="Anterior">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="pc-viewport">
+          <div class="pc-track">
+
+            <article class="showcase-card">
+              <a class="showcase-thumb" href="#" target="_blank" rel="noopener">
+                <img src="img/proyectos/tweets-fifa-2018.jpg" alt="Tweets Copa Mundial FIFA 2018" loading="lazy">
+              </a>
+              <div class="showcase-body">
+                <h3 class="showcase-title">Tweets Copa Mundial FIFA 2018</h3>
+                <p class="showcase-desc">Análisis de Tweets y Text Mining. Dashboard en Power BI con minería de texto.</p>
+                <div class="showcase-tags">
+                  <span class="tag">Power BI</span><span class="tag">Text Mining</span><span class="tag">EDA</span>
+                </div>
+                <div class="showcase-actions">
+                  <a class="action-btn" href="#" target="_blank" rel="noopener">Ver dashboard</a>
+                  <a class="action-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="showcase-card">
+              <a class="showcase-thumb" href="#" target="_blank" rel="noopener">
+                <img src="img/proyectos/tweets-fifa-2018.jpg" alt="Tweets Copa Mundial FIFA 2018" loading="lazy">
+              </a>
+              <div class="showcase-body">
+                <h3 class="showcase-title">Tweets Copa Mundial FIFA 2018</h3>
+                <p class="showcase-desc">Análisis de Tweets y Text Mining. Dashboard en Power BI con minería de texto.</p>
+                <div class="showcase-tags">
+                  <span class="tag">Power BI</span><span class="tag">Text Mining</span><span class="tag">EDA</span>
+                </div>
+                <div class="showcase-actions">
+                  <a class="action-btn" href="#" target="_blank" rel="noopener">Ver dashboard</a>
+                  <a class="action-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="showcase-card">
+              <a class="showcase-thumb" href="#" target="_blank" rel="noopener">
+                <img src="img/proyectos/tweets-fifa-2018.jpg" alt="Tweets Copa Mundial FIFA 2018" loading="lazy">
+              </a>
+              <div class="showcase-body">
+                <h3 class="showcase-title">Tweets Copa Mundial FIFA 2018</h3>
+                <p class="showcase-desc">Análisis de Tweets y Text Mining. Dashboard en Power BI con minería de texto.</p>
+                <div class="showcase-tags">
+                  <span class="tag">Power BI</span><span class="tag">Text Mining</span><span class="tag">EDA</span>
+                </div>
+                <div class="showcase-actions">
+                  <a class="action-btn" href="#" target="_blank" rel="noopener">Ver dashboard</a>
+                  <a class="action-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="showcase-card">
+              <a class="showcase-thumb" href="#" target="_blank" rel="noopener">
+                <img src="img/proyectos/tweets-fifa-2018.jpg" alt="Tweets Copa Mundial FIFA 2018" loading="lazy">
+              </a>
+              <div class="showcase-body">
+                <h3 class="showcase-title">Tweets Copa Mundial FIFA 2018</h3>
+                <p class="showcase-desc">Análisis de Tweets y Text Mining. Dashboard en Power BI con minería de texto.</p>
+                <div class="showcase-tags">
+                  <span class="tag">Power BI</span><span class="tag">Text Mining</span><span class="tag">EDA</span>
+                </div>
+                <div class="showcase-actions">
+                  <a class="action-btn" href="#" target="_blank" rel="noopener">Ver dashboard</a>
+                  <a class="action-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <article class="showcase-card">
+              <a class="showcase-thumb" href="#" target="_blank" rel="noopener">
+                <img src="img/proyectos/tweets-fifa-2018.jpg" alt="Tweets Copa Mundial FIFA 2018" loading="lazy">
+              </a>
+              <div class="showcase-body">
+                <h3 class="showcase-title">Tweets Copa Mundial FIFA 2018</h3>
+                <p class="showcase-desc">Análisis de Tweets y Text Mining. Dashboard en Power BI con minería de texto.</p>
+                <div class="showcase-tags">
+                  <span class="tag">Power BI</span><span class="tag">Text Mining</span><span class="tag">EDA</span>
+                </div>
+                <div class="showcase-actions">
+                  <a class="action-btn" href="#" target="_blank" rel="noopener">Ver dashboard</a>
+                  <a class="action-icon" href="#" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </article>
+
+            <!-- DUPLICA tus cards aquí... -->
+
+          </div>
+        </div>
+
+        <button class="pc-nav pc-next" type="button" aria-label="Siguiente">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
+        <div class="pc-dots" aria-label="Indicadores"></div>
+      </div>
+    </section>
+
+    <!-- CERTS (tu lista vertical intacta) -->
+    <section id="certs" class="certs-vertical">
+      <h2 class="section-title"><span>04.</span> Certificaciones</h2>
+
+      <p class="certs-vertical__subtitle">
+        Formación continua en <span class="hl">Power BI</span>, <span class="hl">SQL</span>, <span class="hl">Python</span> y <span class="hl">Machine Learning</span>.
+      </p>
+
+      <div class="certs-list">
+
+        <!-- CARD 1 -->
+        <article class="cert-row reveal">
+          <a class="cert-row__thumb" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">
+            <img src="img/certs/powerbi-inicial.jpg" alt="Certificado Power BI Inicial"
+                 loading="lazy"
+                 onerror="this.closest('.cert-row__thumb').classList.add('is-missing'); this.remove();" />
+            <span class="thumb-fallback">Certificado</span>
+          </a>
+
+          <div class="cert-row__body">
+            <div class="cert-row__top">
+              <div>
+                <h3 class="cert-row__title">Power BI Inicial</h3>
+                <p class="cert-row__org">Educacion IT</p>
+              </div>
+              <span class="cert-row__year">2023</span>
+            </div>
+
+            <div class="cert-row__chips">
+              <span class="chip">Power BI</span>
+              <span class="chip">Data Viz</span>
+              <span class="chip">Fundamentos</span>
+            </div>
+
+            <div class="cert-row__actions">
+              <a class="cert-btn" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">Ver certificado</a>
+              <a class="cert-icon" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener" aria-label="Abrir">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cert-row reveal">
+          <a class="cert-row__thumb" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">
+            <img src="img/certs/powerbi-inicial.jpg" alt="Certificado Power BI Inicial"
+                 loading="lazy"
+                 onerror="this.closest('.cert-row__thumb').classList.add('is-missing'); this.remove();" />
+            <span class="thumb-fallback">Certificado</span>
+          </a>
+
+          <div class="cert-row__body">
+            <div class="cert-row__top">
+              <div>
+                <h3 class="cert-row__title">Power BI Inicial</h3>
+                <p class="cert-row__org">Educacion IT</p>
+              </div>
+              <span class="cert-row__year">2023</span>
+            </div>
+
+            <div class="cert-row__chips">
+              <span class="chip">Power BI</span>
+              <span class="chip">Data Viz</span>
+              <span class="chip">Fundamentos</span>
+            </div>
+
+            <div class="cert-row__actions">
+              <a class="cert-btn" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">Ver certificado</a>
+              <a class="cert-icon" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener" aria-label="Abrir">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cert-row reveal">
+          <a class="cert-row__thumb" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">
+            <img src="img/certs/powerbi-inicial.jpg" alt="Certificado Power BI Inicial"
+                 loading="lazy"
+                 onerror="this.closest('.cert-row__thumb').classList.add('is-missing'); this.remove();" />
+            <span class="thumb-fallback">Certificado</span>
+          </a>
+
+          <div class="cert-row__body">
+            <div class="cert-row__top">
+              <div>
+                <h3 class="cert-row__title">Power BI Inicial</h3>
+                <p class="cert-row__org">Educacion IT</p>
+              </div>
+              <span class="cert-row__year">2023</span>
+            </div>
+
+            <div class="cert-row__chips">
+              <span class="chip">Power BI</span>
+              <span class="chip">Data Viz</span>
+              <span class="chip">Fundamentos</span>
+            </div>
+
+            <div class="cert-row__actions">
+              <a class="cert-btn" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">Ver certificado</a>
+              <a class="cert-icon" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener" aria-label="Abrir">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cert-row reveal">
+          <a class="cert-row__thumb" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">
+            <img src="img/certs/powerbi-inicial.jpg" alt="Certificado Power BI Inicial"
+                 loading="lazy"
+                 onerror="this.closest('.cert-row__thumb').classList.add('is-missing'); this.remove();" />
+            <span class="thumb-fallback">Certificado</span>
+          </a>
+
+          <div class="cert-row__body">
+            <div class="cert-row__top">
+              <div>
+                <h3 class="cert-row__title">Power BI Inicial</h3>
+                <p class="cert-row__org">Educacion IT</p>
+              </div>
+              <span class="cert-row__year">2023</span>
+            </div>
+
+            <div class="cert-row__chips">
+              <span class="chip">Power BI</span>
+              <span class="chip">Data Viz</span>
+              <span class="chip">Fundamentos</span>
+            </div>
+
+            <div class="cert-row__actions">
+              <a class="cert-btn" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">Ver certificado</a>
+              <a class="cert-icon" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener" aria-label="Abrir">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <article class="cert-row reveal">
+          <a class="cert-row__thumb" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">
+            <img src="img/certs/powerbi-inicial.jpg" alt="Certificado Power BI Inicial"
+                 loading="lazy"
+                 onerror="this.closest('.cert-row__thumb').classList.add('is-missing'); this.remove();" />
+            <span class="thumb-fallback">Certificado</span>
+          </a>
+
+          <div class="cert-row__body">
+            <div class="cert-row__top">
+              <div>
+                <h3 class="cert-row__title">Power BI Inicial</h3>
+                <p class="cert-row__org">Educacion IT</p>
+              </div>
+              <span class="cert-row__year">2023</span>
+            </div>
+
+            <div class="cert-row__chips">
+              <span class="chip">Power BI</span>
+              <span class="chip">Data Viz</span>
+              <span class="chip">Fundamentos</span>
+            </div>
+
+            <div class="cert-row__actions">
+              <a class="cert-btn" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener">Ver certificado</a>
+              <a class="cert-icon" href="img/certs/powerbi-inicial.jpg" target="_blank" rel="noopener" aria-label="Abrir">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- AGREGA las demás cards... -->
+
+      </div>
+    </section>
+
+    <footer id="contact" class="footer">
+      <h3>¿Hablamos?</h3>
+      <p>Actualmente estoy buscando nuevas oportunidades. Si tienes una pregunta o solo quieres saludar, ¡mi bandeja de entrada está abierta!</p>
+      <a href="mailto:alexissamboy1998@gmail.com" class="btn btn-primary big-btn">Escríbeme un E-mail</a>
+
+      <div class="social-icons">
+        <a href="https://github.com/AlexisSamboy"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/alexis-samboy-herrera/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.instagram.com/alexis_samboy/"><i class="fab fa-instagram"></i></a>
+      </div>
+      <p class="credits">Diseñado & Construido por Alexis Samboy</p>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

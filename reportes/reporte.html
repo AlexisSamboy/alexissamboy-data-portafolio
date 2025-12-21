@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reportes — Demo</title>
+  <link rel="stylesheet" href="./report.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span> Reportes de Prueba
+    </div>
+    <nav class="topnav">
+      <a id="linkVentas" href="#">Ventas</a>
+      <a id="linkClientes" href="#">Clientes</a>
+      <a class="home" href="../index.html">Volver al portafolio</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <!-- Encabezado dinámico -->
+    <section class="heading">
+      <div>
+        <h1 id="reportTitle">Cargando…</h1>
+        <p id="reportSubtitle" class="muted">—</p>
+      </div>
+      <div class="sync">
+        <span id="syncBadge" title="Sincronización entre pestañas">●</span>
+        <small class="muted">Sync</small>
+      </div>
+    </section>
+
+    <!-- Panel filtros -->
+    <section class="filters">
+      <div class="field">
+        <label>Desde</label>
+        <input type="date" id="from" />
+      </div>
+      <div class="field">
+        <label>Hasta</label>
+        <input type="date" id="to" />
+      </div>
+      <div class="field">
+        <label id="segmentLabel">Segmento</label>
+        <select id="segment"></select>
+      </div>
+      <div class="field btns">
+        <button id="apply" class="btn">Aplicar</button>
+        <button id="reset" class="btn ghost">Reset</button>
+      </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpis">
+      <article class="kpi"><h4>Total</h4><div id="kpiTotal" class="big">—</div></article>
+      <article class="kpi"><h4>Promedio</h4><div id="kpiAvg" class="big">—</div></article>
+      <article class="kpi"><h4>Máximo</h4><div id="kpiMax" class="big">—</div></article>
+      <article class="kpi"><h4>Mínimo</h4><div id="kpiMin" class="big">—</div></article>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid">
+      <article class="card">
+        <div class="card-head"><h3>Evolución (Línea)</h3></div>
+        <div class="card-body"><canvas id="lineChart"></canvas></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><h3>Top categorías (Barras)</h3></div>
+        <div class="card-body"><canvas id="barChart"></canvas></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><h3>Distribución (Doughnut)</h3></div>
+        <div class="card-body"><canvas id="pieChart"></canvas></div>
+      </article>
+
+      <article class="card table">
+        <div class="card-head"><h3>Tabla</h3></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead id="tblHead"></thead>
+              <tbody id="tblBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <small class="muted">Demo estática · Filtros con deep-linking, persistencia y sincronización en tiempo real</small>
+  </footer>
+
+  <script src="./report.js"></script>
+</body>
+</html>

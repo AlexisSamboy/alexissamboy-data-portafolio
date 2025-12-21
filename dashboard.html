@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Alexis Samboy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="canvas3d"></canvas>
+
+    <nav>
+        <div class="logo">ALEXIS<span>SAMBOY</span></div>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="index.html#projects">Proyectos</a></li>
+            <li><a href="#" class="active">Dashboard Lab</a></li> </ul>
+    </nav>
+
+    <main class="dashboard-container">
+        <header class="dash-header">
+            <h1><i class="fas fa-chart-pie"></i> Visualización de Datos <span class="badge">LIVE</span></h1>
+            <p>Métricas de rendimiento en tiempo real y análisis de tendencias.</p>
+        </header>
+
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h3>Total Procesado</h3>
+                <div class="number">8.4 TB</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> +12% vs mes anterior</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Precisión Modelo</h3>
+                <div class="number">96.8%</div>
+                <div class="trend up"><i class="fas fa-arrow-up"></i> +2.4% optimización</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Anomalías</h3>
+                <div class="number text-alert">14</div>
+                <div class="trend down"><i class="fas fa-arrow-down"></i> -5% detectadas</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card wide">
+                <h3><i class="fas fa-wave-square"></i> Flujo de Usuarios (Real-Time)</h3>
+                <div class="canvas-wrapper">
+                    <canvas id="trafficChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><i class="fas fa-database"></i> Distribución por Fuente</h3>
+                <div class="canvas-wrapper">
+                    <canvas id="sourceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><i class="fas fa-bullseye"></i> Performance del Modelo</h3>
+                <div class="canvas-wrapper">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
