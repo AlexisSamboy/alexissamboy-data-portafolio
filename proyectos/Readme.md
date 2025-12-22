@@ -17,7 +17,7 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 | Carpeta | Contenido |
 |----------|------------|
 | [`proyectos_excel`](./Excel) | Dashboards y reportes interactivos en Excel |
-| [`proyectos_python`](./Python) | Notebooks y scripts en Python |
+| [`Python`](./Python) | Notebooks y scripts en Python |
 | [`SQL`](./sql) | Consultas y ejercicios prácticos en SQL |
 | [`proyectos_powerbi`](./Power-BI) | Informes y dashboards en Power BI |
 
@@ -34,6 +34,7 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 - 🏠 [coloresdominicanos.com](https://coloresdominicanos.com)  
 - 💼 [LinkedIn](https://linkedin.com/in/alexissamboy)  
 - 🐙 [GitHub](https://github.com/AlexisSamboy)
+
 
 
 
