@@ -32,7 +32,8 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 
 ## 🌐 Enlaces
 - 🏠 [coloresdominicanos.com](https://coloresdominicanos.com)  
-- 💼 [LinkedIn](https://linkedin.com/in/alexissamboy](https://www.linkedin.com/in/alexis-samboy-herrera/)  
+- 💼 [LinkedIn](https://www.linkedin.com/in/alexis-samboy-herrera/)
 - 🐙 [Instagram](https://www.instagram.com/alexis_samboy/)
+
 
 
