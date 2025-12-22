@@ -5,7 +5,7 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 ---
 
 ## 🧠 Tecnologías principales
-- 🐍 **Python:** Pandas, NumPy, Matplotlib
+- 🐍 **Python:** Pandas, NumPy, Seabord, Matplotlib
 - 🧮 **Excel Avanzado:** Tablas dinámicas, dashboards y automatización
 - 🧠 **Power BI:** Visualizaciones interactivas y reportes ejecutivos
 - 🗄️ **SQL (MySQL):** Consultas, limpieza y modelado de datos
@@ -16,10 +16,10 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 ## 📁 Estructura del repositorio
 | Carpeta | Contenido |
 |----------|------------|
-| [`proyectos_excel`](./Excel) | Dashboards y reportes interactivos en Excel |
+| [`Excel`](./Excel) | Dashboards y reportes interactivos en Excel |
 | [`Python`](./python) | Notebooks y scripts en Python |
 | [`SQL`](./sql) | Consultas y ejercicios prácticos en SQL |
-| [`proyectos_powerbi`](./Power-BI) | Informes y dashboards en Power BI |
+| [`Power-BI`](./Power-BI) | Informes y dashboards en Power BI |
 
 ---
 
@@ -34,6 +34,7 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 - 🏠 [coloresdominicanos.com](https://coloresdominicanos.com)  
 - 💼 [LinkedIn](https://linkedin.com/in/alexissamboy)  
 - 🐙 [GitHub](https://github.com/AlexisSamboy)
+
 
 
 
