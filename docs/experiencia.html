@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+
+  <title>Experiencia | Alexis Samboy</title>
+  <meta name="description" content="Experiencia de Alexis Samboy en formato línea de tiempo interactiva." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+ 
+  <!-- Icons -->
+  <link rel="icon" href="././img/favicon/favicon.svg" sizes="any">
+  <link rel="icon" href="././img/favicon/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="././img/favicon/favicon-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="././img/favicon/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="././img/favicon/favicon-16.png">
+  
+  <style>
+    :root{
+      --bg0:#05060a;
+      --bg1:#070a14;
+
+      --txt: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.66);
+
+      --blue:#2b6cff;
+      --cyan:#00d4ff;
+      --pink:#ff2b6a;
+
+      --shadow: 0 26px 100px rgba(0,0,0,.62);
+      --radius: 28px;
+
+      --prog: 0;
+      --stageTop: 84px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 620px at 18% 18%, rgba(43,108,255,.22), transparent 60%),
+        radial-gradient(760px 560px at 82% 28%, rgba(0,212,255,.16), transparent 60%),
+        radial-gradient(820px 520px at 70% 86%, rgba(255,43,106,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* Fondo interactivo */
+    #ambient{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      width:100%;
+      height:100%;
+      opacity:.55;
+      pointer-events:none;
+    }
+    .app{ position:relative; z-index:1; }
+
+    /* NAV */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(5,6,10,.80), rgba(5,6,10,.35));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar .inner{
+      width:min(1200px, 92vw);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color: var(--txt);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .brand img{
+      width:38px; height:38px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+    }
+    .navlinks{
+      display:flex;
+      gap: 18px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .navlinks a{
+      color: rgba(255,255,255,.78);
+      text-decoration:none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: .18s ease;
+    }
+    .navlinks a:hover{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.95);
+    }
+    .navlinks a.active{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border: 1px solid rgba(43,108,255,.45);
+      background: rgba(43,108,255,.12);
+      color: rgba(255,255,255,.92);
+      padding: 10px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      font-weight: 800;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      transition: .18s ease;
+      white-space:nowrap;
+    }
+    .cta:hover{ transform: translateY(-1px); background: rgba(43,108,255,.18); }
+    @media (max-width: 680px){ .navlinks{ display:none; } }
+
+    .wrap{
+      width:min(1200px, 92vw);
+      margin: 18px auto 120px;
+    }
+
+    /* HERO */
+    .hero{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(900px 520px at 20% 40%, rgba(43,108,255,.22), transparent 60%),
+        radial-gradient(900px 560px at 85% 45%, rgba(0,212,255,.18), transparent 60%),
+        rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      padding: 38px 34px;
+    }
+    .hero::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: linear-gradient(90deg, rgba(0,212,255,.10), rgba(43,108,255,.10), rgba(255,43,106,.06));
+      filter: blur(26px);
+      opacity:.72;
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; z-index:2; }
+
+    .kicker{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.24);
+      color: rgba(255,255,255,.78);
+      font-weight:700;
+      font-size:12px;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      width:fit-content;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:50%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      box-shadow: 0 0 0 6px rgba(0,212,255,.12);
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(32px, 4vw, 56px);
+      line-height: 1.03;
+      letter-spacing: -1px;
+    }
+    .sub{
+      margin:0;
+      max-width: 80ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.75;
+    }
+    .heroActions{
+      margin-top: 18px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-weight: 900;
+      text-decoration:none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.90);
+      box-shadow: 0 16px 44px rgba(0,0,0,.35);
+      transition:.18s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+    .btn.primary{
+      border-color: rgba(0,212,255,.24);
+      background: rgba(0,212,255,.12);
+    }
+
+    /* ===== Desktop scrollytelling ===== */
+    .scrolly{
+      margin-top: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      overflow: visible !important;
+      position:relative;
+    }
+    .scrolly::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(800px 520px at 30% 20%, rgba(0,212,255,.10), transparent 60%),
+                  radial-gradient(900px 560px at 80% 50%, rgba(43,108,255,.10), transparent 60%);
+      filter: blur(20px);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .scrollSpace{
+      position:relative;
+      height: 600vh; /* JS ajusta */
+      min-height: 1400px;
+      z-index:2;
+    }
+
+    .stage{
+      position:absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      padding: 28px;
+      display:grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      z-index: 3;
+      height: calc(100vh - var(--stageTop) - 18px);
+    }
+    .stage.is-fixed{
+      position:fixed;
+      top: var(--stageTop);
+      left: 0;
+      width: 100%;
+      height: calc(100vh - var(--stageTop) - 18px);
+    }
+    .stage.is-bottom{
+      position:absolute;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .rail{
+      position:relative;
+      padding-top: 10px;
+      border-radius: 22px;
+    }
+    .railLine{
+      position:absolute;
+      left: 74px;
+      top: 20px;
+      bottom: 20px;
+      width: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+    }
+    .railFill{
+      position:absolute;
+      left: 74px;
+      top: 20px;
+      width: 4px;
+      height: calc((100% - 40px) * var(--prog));
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(0,212,255,.95), rgba(43,108,255,.9));
+      box-shadow: 0 0 22px rgba(0,212,255,.18);
+    }
+    .traveler{
+      position:absolute;
+      left: 74px;
+      top: calc(20px + (100% - 40px) * var(--prog));
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      border: 2px solid rgba(0,212,255,.65);
+      box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 26px rgba(0,212,255,.20);
+    }
+
+    .nodes{
+      position:absolute;
+      left: 0;
+      top: 20px;
+      bottom: 20px;
+      width: 100%;
+      pointer-events:none;
+    }
+    .node{
+      position:absolute;
+      left: 74px;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      border-radius:50%;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 0 0 8px rgba(255,255,255,.04);
+      opacity:.55;
+      transition:.25s ease;
+    }
+    .node.active{
+      opacity: 1;
+      background: rgba(255,255,255,.95);
+      border-color: rgba(0,212,255,.35);
+      box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 24px rgba(0,212,255,.12);
+    }
+    .node.active::after{
+      content:"";
+      position:absolute;
+      inset:-14px;
+      border-radius:50%;
+      border: 2px solid rgba(0,212,255,.22);
+      animation: nodePulse 1.8s ease-out infinite;
+    }
+    @keyframes nodePulse{
+      0%{ opacity:.9; transform: scale(.75); }
+      100%{ opacity:0; transform: scale(2.1); }
+    }
+    .label{
+      position:absolute;
+      left: 0;
+      transform: translateY(-50%);
+      width: 60px;
+      text-align:right;
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.62);
+      letter-spacing: .3px;
+      opacity:.9;
+    }
+
+    .burstLayer{
+      position:absolute;
+      inset: 0;
+      pointer-events:none;
+      overflow: visible;
+    }
+    .skillOrb{
+      position:absolute;
+      left: 96px;
+      transform: translateY(-50%);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.30);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      white-space: nowrap;
+      opacity: 0;
+      animation: orbFly 1.35s ease-out forwards;
+      backdrop-filter: blur(8px);
+    }
+    .skillOrb.cyan{ border-color: rgba(0,212,255,.26); background: rgba(0,212,255,.10); }
+    .skillOrb.blue{ border-color: rgba(43,108,255,.26); background: rgba(43,108,255,.10); }
+    .skillOrb.pink{ border-color: rgba(255,43,106,.26); background: rgba(255,43,106,.10); }
+    @keyframes orbFly{
+      0%{ opacity:0; transform: translateY(-50%) translateX(0) scale(.95); }
+      12%{ opacity:1; }
+      100%{ opacity:0; transform: translateY(calc(-50% + var(--ty))) translateX(var(--tx)) scale(1); }
+    }
+
+    .content{
+      position:relative;
+      min-height: 0;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: 14px;
+      padding-right: 4px;
+    }
+    .headRow{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      padding: 6px 0 0;
+    }
+    .headRow .small{
+      color: rgba(255,255,255,.68);
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .headRow .small b{ color: rgba(255,255,255,.92); }
+
+    .card{
+      position:relative;
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      box-shadow: 0 22px 70px rgba(0,0,0,.45);
+      overflow:hidden;
+      padding: 28px;
+      min-height: 0;
+    }
+    .card::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(700px 520px at 20% 25%, rgba(0,212,255,.09), transparent 62%),
+                  radial-gradient(820px 520px at 85% 40%, rgba(43,108,255,.10), transparent 62%);
+      filter: blur(18px);
+      opacity:.75;
+      pointer-events:none;
+    }
+    .card > *{ position:relative; z-index:2; }
+
+    .role{ margin:0; font-size: 24px; font-weight: 900; letter-spacing:.2px; line-height:1.12; }
+    .org{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 14px; }
+    .date{ margin: 12px 0 0; color: rgba(255,255,255,.65); font-weight: 900; font-size: 13px; }
+
+    .divider{ height:1px; margin: 18px 0; background: rgba(255,255,255,.08); }
+
+    .bullets{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(255,255,255,.82);
+      font-weight: 650;
+      max-width: 92ch;
+    }
+    .bullets li{ display:flex; gap:10px; align-items:flex-start; }
+    .bullets li::before{
+      content:"";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 9px;
+      flex: 0 0 8px;
+      background: linear-gradient(90deg, rgba(0,212,255,.95), rgba(43,108,255,.9));
+      box-shadow: 0 0 0 6px rgba(0,212,255,.08);
+    }
+
+    .skillsBox{
+      margin-top: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      padding: 14px;
+      max-width: 92ch;
+    }
+    .skillsBox .t{
+      margin:0 0 10px;
+      font-weight: 900;
+      color: rgba(255,255,255,.88);
+      font-size: 12px;
+      letter-spacing:.35px;
+      text-transform: uppercase;
+    }
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+    .chip{
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.88);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    .fade{ opacity:0; transform: translateY(8px); transition: .25s ease; }
+    .fade.in{ opacity:1; transform: translateY(0); }
+
+    /* ===== Mobile timeline list (no pin, all cards) ===== */
+    .mobileTimeline{
+      display:none;
+      margin-top: 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      padding: 18px;
+    }
+    .mobileTimeline::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(800px 520px at 30% 20%, rgba(0,212,255,.10), transparent 60%),
+                  radial-gradient(900px 560px at 80% 50%, rgba(43,108,255,.10), transparent 60%);
+      filter: blur(20px);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .mobileTimeline > *{ position:relative; z-index:2; }
+
+    .mItem{
+      position:relative;
+      padding-left: 18px;
+      margin: 16px 0 22px;
+    }
+    .mItem::before{
+      content:"";
+      position:absolute;
+      left: 5px;
+      top: 10px;
+      bottom: -18px;
+      width: 2px;
+      background: rgba(255,255,255,.10);
+    }
+    .mItem:last-child::before{ bottom: 10px; }
+
+    .mDot{
+      position:absolute;
+      left: 0;
+      top: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.95);
+      border: 2px solid rgba(0,212,255,.55);
+      box-shadow: 0 0 0 10px rgba(0,212,255,.08);
+    }
+    .mYear{
+      display:inline-flex;
+      margin: 0 0 10px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing:.3px;
+      color: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+    }
+    .mCard{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+      box-shadow: 0 18px 60px rgba(0,0,0,.40);
+      padding: 18px;
+    }
+    .mRole{ margin:0; font-size: 18px; font-weight: 900; line-height:1.15; }
+    .mOrg{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 13px; }
+    .mDate{ margin: 10px 0 0; color: rgba(255,255,255,.62); font-weight: 900; font-size: 12px; }
+
+    .mBullets{
+      margin: 12px 0 0;
+      padding-left: 16px;
+      color: rgba(255,255,255,.82);
+      font-weight: 650;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .mBullets li{ margin: 6px 0; }
+
+    .mSkills{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .mChip{
+      font-size: 11px;
+      font-weight: 900;
+      color: rgba(255,255,255,.88);
+      padding: 7px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    @media (max-width: 680px){
+      /* en móvil mostramos la lista y ocultamos scrollytelling */
+      .scrolly{ display:none; }
+      .mobileTimeline{ display:block; }
+      .hero{ padding: 28px 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .node.active::after{ animation:none; }
+      .skillOrb{ display:none; }
+      .fade{ transition:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="ambient" aria-hidden="true"></canvas>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="inner">
+        <a class="brand" href="./index.html">
+          <img src="./img/logo-nav.png" alt="Alexis Samboy" onerror="this.style.display='none'">
+        </a>
+
+        <nav class="navlinks" aria-label="Navegación">
+          <a href="./index.html#about">Sobre mí</a>
+          <a class="active" href="./experiencia.html">Experiencia</a>
+          <a href="https://github.com/AlexisSamboy/alexissamboy-data-portafolio/tree/main/proyectos">Proyectos</a>
+          <a href="./certificaciones.html">Certificaciones</a>
+        </nav>
+
+        <a class="cta" href="./index.html#contact">Contactar</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <div class="kicker"><span class="dot"></span> Storyline • Timeline</div>
+        <h1>Experiencia</h1>
+        <p class="sub">
+          En desktop: scrollytelling (una escena a la vez). En móvil: timeline vertical completa (todas las experiencias).
+        </p>
+        <div class="heroActions">
+          <a class="btn primary" href="#timeline">Ver experiencia →</a>
+          <a class="btn" href="./index.html#contact">Hablemos</a>
+        </div>
+      </section>
+
+      <!-- ✅ MÓVIL: lista completa -->
+      <section class="mobileTimeline" id="mobileTimeline"></section>
+
+      <!-- ✅ DESKTOP: scrollytelling -->
+      <section id="timeline" class="scrolly">
+        <div class="scrollSpace" id="scrollSpace">
+          <div class="stage" id="stage">
+            <aside class="rail" id="rail" aria-hidden="true">
+              <div class="railLine"></div>
+              <div class="railFill"></div>
+              <div class="traveler"></div>
+              <div class="nodes" id="nodes"></div>
+              <div class="burstLayer" id="burstLayer"></div>
+            </aside>
+
+            <section class="content">
+              <div class="headRow">
+                <div class="small">Activo: <b id="activeLabel">—</b></div>
+                <div class="small">Progreso: <b id="activeProg">0%</b></div>
+              </div>
+
+              <article class="card">
+                <div id="cardInner" class="fade"></div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="./interactive-bg.js"></script>
+  <script src="./experiencia.js"></script>
+</body>
+</html>

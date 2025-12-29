@@ -1001,3 +1001,66 @@ section{
 
   .hero-pro__hint{ bottom: 18px; }
 }
+/* Centrado del CTA debajo de secciones */
+.section-cta{
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+/* === Variantes de color manteniendo el estilo del botón principal === */
+/* (No tocamos padding/radius/tipografía; solo color/glow) */
+
+.btn.btn-projects{
+  background: linear-gradient(90deg, rgba(0,212,255,.22), rgba(43,108,255,.22));
+  border: 1px solid rgba(0,212,255,.50);
+}
+
+.btn.btn-projects:hover{
+  background: linear-gradient(90deg, rgba(0,212,255,.30), rgba(43,108,255,.30));
+  box-shadow: 0 0 0 7px rgba(0,212,255,.08), 0 20px 60px rgba(0,0,0,.55);
+  transform: translateY(-1px);
+}
+
+.btn.btn-certs{
+  background: linear-gradient(90deg, rgba(124,58,237,.22), rgba(0,212,255,.18));
+  border: 1px solid rgba(124,58,237,.55);
+}
+
+.btn.btn-certs:hover{
+  background: linear-gradient(90deg, rgba(124,58,237,.30), rgba(0,212,255,.24));
+  box-shadow: 0 0 0 7px rgba(124,58,237,.08), 0 20px 60px rgba(0,0,0,.55);
+  transform: translateY(-1px);
+}
+/* Centrado igual al CTA del footer */
+.section-cta{
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+/* MISMO botón (btn btn-primary big-btn) pero variando color de borde/glow */
+
+/* PROYECTOS: cyan */
+.btn.btn-primary.big-btn.btn-projects{
+  border-color: rgba(0, 212, 255, .55) !important;
+  box-shadow:
+    0 0 0 6px rgba(0, 212, 255, .10),
+    0 18px 60px rgba(0,0,0,.55) !important;
+}
+.btn.btn-primary.big-btn.btn-projects:hover{
+  background: rgba(0, 212, 255, .10) !important;
+  transform: translateY(-1px);
+}
+
+/* CERTIFICADOS: violeta */
+.btn.btn-primary.big-btn.btn-certs{
+  border-color: rgba(124, 58, 237, .58) !important;
+  box-shadow:
+    0 0 0 6px rgba(124, 58, 237, .10),
+    0 18px 60px rgba(0,0,0,.55) !important;
+}
+.btn.btn-primary.big-btn.btn-certs:hover{
+  background: rgba(124, 58, 237, .12) !important;
+  transform: translateY(-1px);
+}
