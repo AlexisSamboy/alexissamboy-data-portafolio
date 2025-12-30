@@ -1,0 +1,1042 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPncGdDNQjBEVGgtN8e8R+v",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/AlexisSamboy/alexissamboy-data-portafolio/blob/main/proyectos/python/02_Analisis_habitos_personales_spotify\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **Análisis de hábitos de escucha usando datos personales de Spotify**"
+      ],
+      "metadata": {
+        "id": "dF4GZ6ePgsJz"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Contexto\n",
+        "Spotify permite solicitar el historial completo de reproducción.  \n",
+        "Este proyecto analiza mis **datos** reales de escucha desde el inicio de mi cuenta.\n",
+        "con el objetivo de identificar patrones de consumo musical en el tiempo."
+      ],
+      "metadata": {
+        "id": "hsuoCay8gztJ"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Objetivo\n",
+        "- Analizar hábitos de consumo musical.\n",
+        "- Identificar artistas y canciones más reproducidas\n",
+        "- Evaluar patrones por día, hora y período"
+      ],
+      "metadata": {
+        "id": "j2v7PbGChDiM"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "## Fuente de datos\n",
+        "Los datos fueron obtenidos directamente desde Spotify a través de la solicitud\n",
+        "de historial completo de cuenta.  \n",
+        "**Formato**: archivos JSON (StreamingHistory Audio)."
+      ],
+      "metadata": {
+        "id": "OUbh4e7OhM6K"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **Importar las librerias a utilizar**\n",
+        "\n",
+        "Los datos proporcionados por spotify son en formato **JSON**, empezaremos importando esa libreria. Luego importaremos a **Pandas** para empezar la preparación de los datos y el analisis exploratorio."
+      ],
+      "metadata": {
+        "id": "CqwKlre9jVFJ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import json"
+      ],
+      "metadata": {
+        "id": "vjJmtSbpkQru"
+      },
+      "execution_count": 10,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "files = [\"Streaming_History_Audio_2020-2023_0.json\",\"Streaming_History_Audio_2023-2024_1.json\",\"Streaming_History_Audio_2024-2025_2.json\"]"
+      ],
+      "metadata": {
+        "id": "gddPaX45kdxb"
+      },
+      "execution_count": 11,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Ya tenemos los archivos en una variable llamada Files**\n"
+      ],
+      "metadata": {
+        "id": "ivZ9gXNVlNZr"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **Importar pandas**"
+      ],
+      "metadata": {
+        "id": "KNqF3z8al_iG"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd"
+      ],
+      "metadata": {
+        "id": "JZlqULXFl9OO"
+      },
+      "execution_count": 12,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "dfs = []\n",
+        "\n",
+        "for file in files:\n",
+        "    with open(file, 'r') as f:\n",
+        "        data = json.load(f)\n",
+        "        dfs.append(pd.DataFrame(data))"
+      ],
+      "metadata": {
+        "id": "TBuwJ09blty-"
+      },
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Cada archivo JSON se carga de forma independiente y se convierte en un DataFrame. Se almacena en una lista para luego unificar en un solo DataFrame."
+      ],
+      "metadata": {
+        "id": "xbY5azfGmhd1"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "🔗**Unificación de datos**"
+      ],
+      "metadata": {
+        "id": "ZiYHkUsrm2xs"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = pd.concat(dfs, ignore_index=True)"
+      ],
+      "metadata": {
+        "id": "KkcF9RHKm7gv"
+      },
+      "execution_count": 14,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Observación**: *Concat* es una función de pandas que utilizamos para concatenar o unificar varios DataFrames, por defecto la funcion utilza el (**Ignore_index**) = false, esto significa que conservara los index de cada registro, esto no es malo del todo, pero si utlizamos en varios DataFrames el mismo index cuando apliquemos una busqueda por index tendremos varios resultados y lo ideal seria que un solo index sea asociado a un solo registro. Por esa razon utilizamos el (**Ignore_index**) = true para ignorar el index y crear nuevos index."
+      ],
+      "metadata": {
+        "id": "fzzbMKj0njtD"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.shape"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "odMBJLP_qK2B",
+        "outputId": "09c85be8-94f7-406e-ad1c-cf9c2de16816"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "(46828, 23)"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 15
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Shape**: Utilizamos este atributo de pandas para visualizar la cantidad de registros en el nuevo DataFrame. El resultado que arrojo fue **46,828 filas** y **23 columnas**."
+      ],
+      "metadata": {
+        "id": "4Td5vrjUqOSj"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.head()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 602
+        },
+        "id": "QYiy_VoKrXuR",
+        "outputId": "c5e2abff-a7b8-4706-da09-4263882966a8"
+      },
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "                     ts                                           platform  \\\n",
+              "0  2020-08-20T03:49:59Z  Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...   \n",
+              "1  2020-08-20T03:50:58Z  Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...   \n",
+              "2  2020-08-20T03:52:59Z  Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...   \n",
+              "3  2020-08-20T03:54:02Z  Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...   \n",
+              "4  2020-08-20T03:54:21Z  Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...   \n",
+              "\n",
+              "   ms_played conn_country       ip_addr master_metadata_track_name  \\\n",
+              "0       1004           DO  181.37.40.76             Hey DJ - Remix   \n",
+              "1      32117           DO  181.37.40.76                 Doble Filo   \n",
+              "2      27491           DO  181.37.40.76                   Princesa   \n",
+              "3      30007           DO  181.37.40.76           Consejo De Padre   \n",
+              "4      18675           DO  181.37.40.76                   Relación   \n",
+              "\n",
+              "  master_metadata_album_artist_name master_metadata_album_album_name  \\\n",
+              "0                              CNCO                   Hey DJ - Remix   \n",
+              "1                      Romeo Santos                           Golden   \n",
+              "2                       Frank Reyes                    Dosis De Amor   \n",
+              "3                    Anthony Santos                Siempre Romántico   \n",
+              "4                              Sech                           1 of 1   \n",
+              "\n",
+              "                      spotify_track_uri episode_name  ... audiobook_uri  \\\n",
+              "0  spotify:track:3cR5ZtQ4JqGj4VHBb1gvFf         None  ...          None   \n",
+              "1  spotify:track:7sasRSZNmUPaHXLWndC8oj         None  ...          None   \n",
+              "2  spotify:track:5ABUWUrqYGMXbF8qCZ5zF9         None  ...          None   \n",
+              "3  spotify:track:7HQ9aLUEUCtmrDHVh27jBD         None  ...          None   \n",
+              "4  spotify:track:3ZG8N7aWw2meb6UrI5ZmnZ         None  ...          None   \n",
+              "\n",
+              "  audiobook_chapter_uri audiobook_chapter_title reason_start       reason_end  \\\n",
+              "0                  None                    None      playbtn  unexpected-exit   \n",
+              "1                  None                    None      playbtn           fwdbtn   \n",
+              "2                  None                    None       fwdbtn        trackdone   \n",
+              "3                  None                    None    trackdone          endplay   \n",
+              "4                  None                    None      playbtn          endplay   \n",
+              "\n",
+              "  shuffle skipped offline  offline_timestamp  incognito_mode  \n",
+              "0    True   False   False                NaN           False  \n",
+              "1   False   False   False                NaN           False  \n",
+              "2   False   False   False                NaN           False  \n",
+              "3   False   False   False                NaN           False  \n",
+              "4    True   False   False                NaN           False  \n",
+              "\n",
+              "[5 rows x 23 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-40784efb-6a00-465a-9ea7-b4aa7418afc7\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>ts</th>\n",
+              "      <th>platform</th>\n",
+              "      <th>ms_played</th>\n",
+              "      <th>conn_country</th>\n",
+              "      <th>ip_addr</th>\n",
+              "      <th>master_metadata_track_name</th>\n",
+              "      <th>master_metadata_album_artist_name</th>\n",
+              "      <th>master_metadata_album_album_name</th>\n",
+              "      <th>spotify_track_uri</th>\n",
+              "      <th>episode_name</th>\n",
+              "      <th>...</th>\n",
+              "      <th>audiobook_uri</th>\n",
+              "      <th>audiobook_chapter_uri</th>\n",
+              "      <th>audiobook_chapter_title</th>\n",
+              "      <th>reason_start</th>\n",
+              "      <th>reason_end</th>\n",
+              "      <th>shuffle</th>\n",
+              "      <th>skipped</th>\n",
+              "      <th>offline</th>\n",
+              "      <th>offline_timestamp</th>\n",
+              "      <th>incognito_mode</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>2020-08-20T03:49:59Z</td>\n",
+              "      <td>Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...</td>\n",
+              "      <td>1004</td>\n",
+              "      <td>DO</td>\n",
+              "      <td>181.37.40.76</td>\n",
+              "      <td>Hey DJ - Remix</td>\n",
+              "      <td>CNCO</td>\n",
+              "      <td>Hey DJ - Remix</td>\n",
+              "      <td>spotify:track:3cR5ZtQ4JqGj4VHBb1gvFf</td>\n",
+              "      <td>None</td>\n",
+              "      <td>...</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>playbtn</td>\n",
+              "      <td>unexpected-exit</td>\n",
+              "      <td>True</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>False</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>2020-08-20T03:50:58Z</td>\n",
+              "      <td>Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...</td>\n",
+              "      <td>32117</td>\n",
+              "      <td>DO</td>\n",
+              "      <td>181.37.40.76</td>\n",
+              "      <td>Doble Filo</td>\n",
+              "      <td>Romeo Santos</td>\n",
+              "      <td>Golden</td>\n",
+              "      <td>spotify:track:7sasRSZNmUPaHXLWndC8oj</td>\n",
+              "      <td>None</td>\n",
+              "      <td>...</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>playbtn</td>\n",
+              "      <td>fwdbtn</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>False</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>2020-08-20T03:52:59Z</td>\n",
+              "      <td>Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...</td>\n",
+              "      <td>27491</td>\n",
+              "      <td>DO</td>\n",
+              "      <td>181.37.40.76</td>\n",
+              "      <td>Princesa</td>\n",
+              "      <td>Frank Reyes</td>\n",
+              "      <td>Dosis De Amor</td>\n",
+              "      <td>spotify:track:5ABUWUrqYGMXbF8qCZ5zF9</td>\n",
+              "      <td>None</td>\n",
+              "      <td>...</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>fwdbtn</td>\n",
+              "      <td>trackdone</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>False</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>2020-08-20T03:54:02Z</td>\n",
+              "      <td>Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...</td>\n",
+              "      <td>30007</td>\n",
+              "      <td>DO</td>\n",
+              "      <td>181.37.40.76</td>\n",
+              "      <td>Consejo De Padre</td>\n",
+              "      <td>Anthony Santos</td>\n",
+              "      <td>Siempre Romántico</td>\n",
+              "      <td>spotify:track:7HQ9aLUEUCtmrDHVh27jBD</td>\n",
+              "      <td>None</td>\n",
+              "      <td>...</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>trackdone</td>\n",
+              "      <td>endplay</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>False</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2020-08-20T03:54:21Z</td>\n",
+              "      <td>Android-tablet OS 8.1.0 API 27 (SAMSUNG, SM-T8...</td>\n",
+              "      <td>18675</td>\n",
+              "      <td>DO</td>\n",
+              "      <td>181.37.40.76</td>\n",
+              "      <td>Relación</td>\n",
+              "      <td>Sech</td>\n",
+              "      <td>1 of 1</td>\n",
+              "      <td>spotify:track:3ZG8N7aWw2meb6UrI5ZmnZ</td>\n",
+              "      <td>None</td>\n",
+              "      <td>...</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>None</td>\n",
+              "      <td>playbtn</td>\n",
+              "      <td>endplay</td>\n",
+              "      <td>True</td>\n",
+              "      <td>False</td>\n",
+              "      <td>False</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>False</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>5 rows × 23 columns</p>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-40784efb-6a00-465a-9ea7-b4aa7418afc7')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-40784efb-6a00-465a-9ea7-b4aa7418afc7 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-40784efb-6a00-465a-9ea7-b4aa7418afc7');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "    <div id=\"df-af49cfbd-0d4a-428d-a03e-81c51866e783\">\n",
+              "      <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-af49cfbd-0d4a-428d-a03e-81c51866e783')\"\n",
+              "                title=\"Suggest charts\"\n",
+              "                style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "      </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "      <script>\n",
+              "        async function quickchart(key) {\n",
+              "          const quickchartButtonEl =\n",
+              "            document.querySelector('#' + key + ' button');\n",
+              "          quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "          quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "          try {\n",
+              "            const charts = await google.colab.kernel.invokeFunction(\n",
+              "                'suggestCharts', [key], {});\n",
+              "          } catch (error) {\n",
+              "            console.error('Error during call to suggestCharts:', error);\n",
+              "          }\n",
+              "          quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "          quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "        }\n",
+              "        (() => {\n",
+              "          let quickchartButtonEl =\n",
+              "            document.querySelector('#df-af49cfbd-0d4a-428d-a03e-81c51866e783 button');\n",
+              "          quickchartButtonEl.style.display =\n",
+              "            google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "        })();\n",
+              "      </script>\n",
+              "    </div>\n",
+              "\n",
+              "    </div>\n",
+              "  </div>\n"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "dataframe",
+              "variable_name": "df"
+            }
+          },
+          "metadata": {},
+          "execution_count": 16
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Head**: Este atributo lo aplicamos para visualizar la estructura del DataFrame, nos muestra los primeros 5 registros y todas las columnas que componen el dataset."
+      ],
+      "metadata": {
+        "id": "EK4xCvpprmSE"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Veamos las variables categóricas y las numéricas\n",
+        "df.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ejN0CxL-tKGm",
+        "outputId": "ede28818-da89-4665-93ba-066413974404"
+      },
+      "execution_count": 17,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 46828 entries, 0 to 46827\n",
+            "Data columns (total 23 columns):\n",
+            " #   Column                             Non-Null Count  Dtype  \n",
+            "---  ------                             --------------  -----  \n",
+            " 0   ts                                 46828 non-null  object \n",
+            " 1   platform                           46828 non-null  object \n",
+            " 2   ms_played                          46828 non-null  int64  \n",
+            " 3   conn_country                       46828 non-null  object \n",
+            " 4   ip_addr                            46828 non-null  object \n",
+            " 5   master_metadata_track_name         46813 non-null  object \n",
+            " 6   master_metadata_album_artist_name  46813 non-null  object \n",
+            " 7   master_metadata_album_album_name   46813 non-null  object \n",
+            " 8   spotify_track_uri                  46813 non-null  object \n",
+            " 9   episode_name                       15 non-null     object \n",
+            " 10  episode_show_name                  15 non-null     object \n",
+            " 11  spotify_episode_uri                15 non-null     object \n",
+            " 12  audiobook_title                    0 non-null      object \n",
+            " 13  audiobook_uri                      0 non-null      object \n",
+            " 14  audiobook_chapter_uri              0 non-null      object \n",
+            " 15  audiobook_chapter_title            0 non-null      object \n",
+            " 16  reason_start                       46828 non-null  object \n",
+            " 17  reason_end                         46828 non-null  object \n",
+            " 18  shuffle                            46828 non-null  bool   \n",
+            " 19  skipped                            46828 non-null  bool   \n",
+            " 20  offline                            46828 non-null  bool   \n",
+            " 21  offline_timestamp                  33662 non-null  float64\n",
+            " 22  incognito_mode                     46828 non-null  bool   \n",
+            "dtypes: bool(4), float64(1), int64(1), object(17)\n",
+            "memory usage: 7.0+ MB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Podemos observar que existen muchas columnas con datos nulos, muchas de esas columnas no nos aportan ninguna informacion relevante para nuestro analisis, entonces muchas de esas columnas la vamos a eliminar, pero antes vamos a renombrar e identificar esas columnas relevantes para nuestro analisis."
+      ],
+      "metadata": {
+        "id": "4vip2bjquSUY"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# **Limpiezas de los Datos**\n",
+        "\n",
+        "Realizaremos el proceso de limpieza teniendo en cuenta las situaciones más comunes:\n",
+        "\n",
+        "* Datos faltantes en algunas celdas.\n",
+        "\n",
+        "* Columnas irrelevantes (que no responden al problema que queremos resolver)\n",
+        "\n",
+        "* Renombrar columnas\n",
+        "\n",
+        "* Estandarización de los datos: convertir datos de fecha en formatos de fecha y entre otros.\n",
+        "\n",
+        "Al final de este proceso de limpieza deberíamos tener un set de datos íntegro, listo para la fase de Análisis Exploratorio."
+      ],
+      "metadata": {
+        "id": "QZh5vWSYx2Xi"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### **1. Limpieza de datos**\n",
+        "\n",
+        "Vamos a empezar con esas columnas que poseen casi todos registros nulos y que no aportan nada relevante a nuestro analisis."
+      ],
+      "metadata": {
+        "id": "5N4m74ocyFz0"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = df.drop(columns=['episode_name', 'episode_show_name', 'spotify_episode_uri', 'audiobook_title','audiobook_uri','audiobook_chapter_uri','audiobook_chapter_title'])\n",
+        "df.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "vUKNPnA50YvT",
+        "outputId": "6f8eeda3-f26d-4b56-a0f9-8f4a2eb91934"
+      },
+      "execution_count": 18,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "RangeIndex: 46828 entries, 0 to 46827\n",
+            "Data columns (total 16 columns):\n",
+            " #   Column                             Non-Null Count  Dtype  \n",
+            "---  ------                             --------------  -----  \n",
+            " 0   ts                                 46828 non-null  object \n",
+            " 1   platform                           46828 non-null  object \n",
+            " 2   ms_played                          46828 non-null  int64  \n",
+            " 3   conn_country                       46828 non-null  object \n",
+            " 4   ip_addr                            46828 non-null  object \n",
+            " 5   master_metadata_track_name         46813 non-null  object \n",
+            " 6   master_metadata_album_artist_name  46813 non-null  object \n",
+            " 7   master_metadata_album_album_name   46813 non-null  object \n",
+            " 8   spotify_track_uri                  46813 non-null  object \n",
+            " 9   reason_start                       46828 non-null  object \n",
+            " 10  reason_end                         46828 non-null  object \n",
+            " 11  shuffle                            46828 non-null  bool   \n",
+            " 12  skipped                            46828 non-null  bool   \n",
+            " 13  offline                            46828 non-null  bool   \n",
+            " 14  offline_timestamp                  33662 non-null  float64\n",
+            " 15  incognito_mode                     46828 non-null  bool   \n",
+            "dtypes: bool(4), float64(1), int64(1), object(10)\n",
+            "memory usage: 4.5+ MB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Luego de eliminar esas columnas aun quedan algunos registros nulos, vamos aplicar el atributo de pandas **dropna** y eliminamos todos esos datos nulos."
+      ],
+      "metadata": {
+        "id": "mbYfnwUq1b4p"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Con esta funcion eliminamos los datos faltantes\n",
+        "df.dropna(inplace=True)\n",
+        "\n",
+        "#Volvemos a imprimir los detalles del data set y confirmar que no existan datos faltantes\n",
+        "df.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "5XonT1qy2C84",
+        "outputId": "5f792155-998a-4c9e-cff9-7c4ff0233d94"
+      },
+      "execution_count": 20,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "Index: 33657 entries, 3686 to 46827\n",
+            "Data columns (total 16 columns):\n",
+            " #   Column                             Non-Null Count  Dtype  \n",
+            "---  ------                             --------------  -----  \n",
+            " 0   ts                                 33657 non-null  object \n",
+            " 1   platform                           33657 non-null  object \n",
+            " 2   ms_played                          33657 non-null  int64  \n",
+            " 3   conn_country                       33657 non-null  object \n",
+            " 4   ip_addr                            33657 non-null  object \n",
+            " 5   master_metadata_track_name         33657 non-null  object \n",
+            " 6   master_metadata_album_artist_name  33657 non-null  object \n",
+            " 7   master_metadata_album_album_name   33657 non-null  object \n",
+            " 8   spotify_track_uri                  33657 non-null  object \n",
+            " 9   reason_start                       33657 non-null  object \n",
+            " 10  reason_end                         33657 non-null  object \n",
+            " 11  shuffle                            33657 non-null  bool   \n",
+            " 12  skipped                            33657 non-null  bool   \n",
+            " 13  offline                            33657 non-null  bool   \n",
+            " 14  offline_timestamp                  33657 non-null  float64\n",
+            " 15  incognito_mode                     33657 non-null  bool   \n",
+            "dtypes: bool(4), float64(1), int64(1), object(10)\n",
+            "memory usage: 3.5+ MB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Aun podemos eliminar columanas que no aportan nada o que irrelevante. Por ejemplo \"conn_country\" esta columna muestra el pais de reproducción, pero toda la reproducción fue en **Rep. Dom.** mi pais de origen. {\"ip_addr\", \"spotify_track_uri\", \"incognito_mode\"}"
+      ],
+      "metadata": {
+        "id": "81j2Wkiz3KTz"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = df.drop(columns=[\"ip_addr\", \"spotify_track_uri\", \"incognito_mode\"])\n",
+        "df.info()"
+      ],
+      "metadata": {
+        "id": "iDlHhISs5QW_"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df = df.drop(columns=[\"conn_country\"])\n",
+        "df.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BF85kwk64M6T",
+        "outputId": "31ab5c4b-ed97-42f2-d9d5-5c3a208c38d2"
+      },
+      "execution_count": 23,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "Index: 33657 entries, 3686 to 46827\n",
+            "Data columns (total 12 columns):\n",
+            " #   Column                             Non-Null Count  Dtype  \n",
+            "---  ------                             --------------  -----  \n",
+            " 0   ts                                 33657 non-null  object \n",
+            " 1   platform                           33657 non-null  object \n",
+            " 2   ms_played                          33657 non-null  int64  \n",
+            " 3   master_metadata_track_name         33657 non-null  object \n",
+            " 4   master_metadata_album_artist_name  33657 non-null  object \n",
+            " 5   master_metadata_album_album_name   33657 non-null  object \n",
+            " 6   reason_start                       33657 non-null  object \n",
+            " 7   reason_end                         33657 non-null  object \n",
+            " 8   shuffle                            33657 non-null  bool   \n",
+            " 9   skipped                            33657 non-null  bool   \n",
+            " 10  offline                            33657 non-null  bool   \n",
+            " 11  offline_timestamp                  33657 non-null  float64\n",
+            "dtypes: bool(3), float64(1), int64(1), object(7)\n",
+            "memory usage: 2.7+ MB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Vamos ahora a renombrar las columnas con nombre mas acorde a los datos que proporcionan"
+      ],
+      "metadata": {
+        "id": "DpUEVsmE2irA"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.rename(columns={\n",
+        "    'ts': 'fecha_reproduccion',\n",
+        "    'platform': 'plataforma',\n",
+        "    'ms_played': 'duracion_ms',\n",
+        "    'master_metadata_track_name': 'Nom_cancion',\n",
+        "    'master_metadata_album_artist_name': 'Nom_artista',\n",
+        "    'master_metadata_album_album_name': 'Nom_album',\n",
+        "    'reason_start': 'motivo_inicio',\n",
+        "    'reason_end': 'motivo_fin',\n",
+        "    'shuffle': 'Aleatorio',\n",
+        "    'skipped': 'saltado',\n",
+        "    'offline': 'offline',\n",
+        "    'offline_timestamp': 'fecha_offline'\n",
+        "}, inplace=True)"
+      ],
+      "metadata": {
+        "id": "E6iA3ALZ2snj"
+      },
+      "execution_count": 27,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "df.info()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "OSK4j9QF6KhY",
+        "outputId": "f0b48344-e5b8-4c97-c179-face8cc5403b"
+      },
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "<class 'pandas.core.frame.DataFrame'>\n",
+            "Index: 33657 entries, 3686 to 46827\n",
+            "Data columns (total 12 columns):\n",
+            " #   Column              Non-Null Count  Dtype  \n",
+            "---  ------              --------------  -----  \n",
+            " 0   fecha_reproduccion  33657 non-null  object \n",
+            " 1   plataforma          33657 non-null  object \n",
+            " 2   duracion_ms         33657 non-null  int64  \n",
+            " 3   Nom_cancion         33657 non-null  object \n",
+            " 4   Nom_artista         33657 non-null  object \n",
+            " 5   Nom_album           33657 non-null  object \n",
+            " 6   motivo_inicio       33657 non-null  object \n",
+            " 7   motivo_fin          33657 non-null  object \n",
+            " 8   Aleatorio           33657 non-null  bool   \n",
+            " 9   saltado             33657 non-null  bool   \n",
+            " 10  offline             33657 non-null  bool   \n",
+            " 11  fecha_offline       33657 non-null  float64\n",
+            "dtypes: bool(3), float64(1), int64(1), object(7)\n",
+            "memory usage: 2.7+ MB\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "### Ahora vamos a estandirizar los datos\n",
+        "\n",
+        "Convertir las columnas \"Fecha_reproduccion\" en formato datatime porque actualmente esta object, de igual manera Fecha_offline. Tambien llevaremos la duracion de milisegundo a minutos y tomaremos como un reproduccion valida toda aquella reporduccion que supere los 10 segundos."
+      ],
+      "metadata": {
+        "id": "BO3Pinpq9dYL"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Ya terminamos la limpieza basica de los datos (Eliminamos columnas, datos nulos y renombramos columnas)"
+      ],
+      "metadata": {
+        "id": "kj6pqTyv7oBb"
+      }
+    }
+  ]
+}
