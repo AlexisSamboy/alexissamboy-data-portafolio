@@ -1,526 +1,353 @@
-/* experiencia.js (fix definitivo) - Timeline Alexis Samboy */
-(() => {
-  "use strict";
-
-  // ========= CONFIG (si cambiaste IDs, edita aquí) =========
-  const SEL = {
-    scrolly: "#timeline",          // section del scrollytelling
-    scrollSpace: "#scrollSpace",   // contenedor alto
-    stage: "#stage",              // escena pin
-    rail: "#rail",                // aside rail (opcional)
-    nodes: "#nodes",              // contenedor nodos
-    cardInner: "#cardInner",      // contenedor de contenido
-    activeLabel: "#activeLabel",  // label activo
-    activeProg: "#activeProg",    // % progreso
-    steps: "#steps",              // contenedor steps (si existe)
-    mobile: "#mobileTimeline",    // contenedor móvil
-    navbar: ".navbar"             // navbar para offset
-  };
-
-  // ========= DATA (más reciente -> más antiguo) =========
-  const XP = [
-    {
-      year: "2025",
-      role: "SOPORTE TÉCNICO INFORMÁTICO",
-      org: "Ministerio Público (Procuraduría de la República Dominicana)",
-      date: "Agosto 2025 - Presente",
-      bullets: [
-        "Diagnóstico y reparación de equipos (CPUs e impresoras en red).",
-        "Instalación, configuración y mantenimiento de sistemas en dependencias judiciales.",
-        "Resolución de incidencias de red, software y hardware (presencial y remoto).",
-        "Administración básica de dominios y usuarios en Office 365.",
-        "Aplicación de medidas de seguridad informática y respaldo de información.",
-        "Gestión de inventarios, solicitudes a almacén y soporte a múltiples usuarios.",
-        "Seguimiento de incidencias mediante sistemas de tickets y apoyo en mejora de procesos técnicos."
-      ],
-      skills: ["Redes", "Hardware", "Office 365", "Seguridad", "Tickets", "Backups", "Soporte remoto"]
-    },
-    {
-      year: "2024",
-      role: "SOPORTE TÉCNICO",
-      org: "Negosur (Loteka)",
-      date: "Junio 2024 - Agosto 2025",
-      bullets: [
-        "Diagnóstico y reparación de equipos (CPUs, impresoras, escáneres y sistemas POS).",
-        "Instalación, configuración y mantenimiento en sucursales.",
-        "Resolución de fallos de red, software y hardware (presencial y remoto).",
-        "Apoyo en análisis básico de incidencias para mejorar procesos."
-      ],
-      skills: ["POS", "Soporte", "Redes", "Diagnóstico", "Mantenimiento"]
-    },
-    {
-      year: "2024",
-      role: "PROFESOR DE PISO",
-      org: "Smart Fit Dominicanan",
-      date: "2024",
-      bullets: [
-        "Acompañamiento y orientación a usuarios en rutinas y uso correcto de equipos.",
-        "Organización del área y atención directa al cliente."
-      ],
-      skills: ["Atención al cliente", "Comunicación", "Organización"]
-    },
-    {
-      year: "2019",
-      role: "ASESOR COMERCIAL",
-      org: "Urrutia Auto Import",
-      date: "2019",
-      bullets: [
-        "Atención y asesoría a clientes para identificar necesidades y cerrar ventas.",
-        "Seguimiento y soporte postventa."
-      ],
-      skills: ["Ventas", "Comunicación", "Seguimiento"]
-    },
-    {
-      year: "2019",
-      role: "OPERADOR TÉCNICO",
-      org: "Trébol Cable",
-      date: "2019",
-      bullets: [
-        "Soporte técnico operativo y resolución de incidencias básicas.",
-        "Apoyo a instalaciones y verificación de funcionamiento."
-      ],
-      skills: ["Soporte", "Operación", "Instalación"]
-    },
-    {
-      year: "2016",
-      role: "SERVICIO AL CLIENTE Y SOPORTE OPERATIVO",
-      org: "Dominos Pizza",
-      date: "2016",
-      bullets: [
-        "Atención al cliente y soporte operativo.",
-        "Trabajo en equipo y manejo de tiempos en entorno de alta demanda."
-      ],
-      skills: ["Servicio", "Trabajo en equipo", "Gestión del tiempo"]
-    }
-  ];
-
-  // ========= HELPERS =========
-  const qs = (s, r = document) => r.querySelector(s);
-  const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
-  const esc = (str) =>
-    String(str)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-
-  function injectCSS() {
-    if (qs("#xp-timeline-css")) return;
-
-    const css = document.createElement("style");
-    css.id = "xp-timeline-css";
-    css.textContent = `
-      /* ===== XP TIMELINE (namespaced para NO chocar con tu style.css) ===== */
-
-      :root{ --xpProg: 0; --xpStageTop: 84px; }
-
-      /* Pin por JS (no depende de .is-fixed) */
-      .xp-stage-pin{ will-change: transform; }
-
-      /* Rail */
-      .xp-rail{
-        position:relative;
-        padding-top: 10px;
-        border-radius: 22px;
-        min-height: 100%;
-      }
-      .xp-railLine{
-        position:absolute;
-        left: 74px;
-        top: 20px;
-        bottom: 20px;
-        width: 4px;
-        border-radius: 999px;
-        background: rgba(255,255,255,.10);
-      }
-      .xp-railFill{
-        position:absolute;
-        left: 74px;
-        top: 20px;
-        width: 4px;
-        height: calc((100% - 40px) * var(--xpProg));
-        border-radius: 999px;
-        background: linear-gradient(180deg, rgba(0,212,255,.95), rgba(43,108,255,.9));
-        box-shadow: 0 0 22px rgba(0,212,255,.18);
-      }
-      .xp-traveler{
-        position:absolute;
-        left: 74px;
-        top: calc(20px + (100% - 40px) * var(--xpProg));
-        transform: translate(-50%, -50%);
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: rgba(255,255,255,.92);
-        border: 2px solid rgba(0,212,255,.65);
-        box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 26px rgba(0,212,255,.20);
-      }
-
-      /* Nodes + labels (evita conflicto con .label/.node del index) */
-      .xp-nodes{
-        position:absolute;
-        left: 0;
-        top: 20px;
-        bottom: 20px;
-        width: 100%;
-        pointer-events: none;
-      }
-      .xp-node{
-        position:absolute;
-        left: 74px;
-        transform: translate(-50%, -50%);
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: rgba(255,255,255,.62);
-        border: 1px solid rgba(255,255,255,.14);
-        box-shadow: 0 0 0 8px rgba(255,255,255,.04);
-        opacity: .55;
-        transition: .25s ease;
-      }
-      .xp-node.is-active{
-        opacity: 1;
-        background: rgba(255,255,255,.95);
-        border-color: rgba(0,212,255,.35);
-        box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 24px rgba(0,212,255,.12);
-      }
-
-      .xp-label{
-        position:absolute;
-        left: 0;
-        transform: translateY(-50%);
-        width: 60px;
-        text-align:right;
-        font-size: 12px;
-        font-weight: 900;
-        color: rgba(255,255,255,.62);
-        letter-spacing: .3px;
-        opacity: .9;
-      }
-
-      /* Contenido card (namespaced) */
-      .xp-contentWrap{ display:block; }
-      .xp-title{ margin:0; font-size: 24px; font-weight: 900; line-height: 1.12; }
-      .xp-org{ margin:8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 14px; }
-      .xp-date{ margin:12px 0 0; color: rgba(255,255,255,.65); font-weight: 900; font-size: 13px; }
-      .xp-divider{ height:1px; margin: 18px 0; background: rgba(255,255,255,.08); }
-
-      .xp-bullets{
-        margin:0;
-        padding:0;
-        list-style:none;
-        display:grid;
-        gap:10px;
-        font-size: 15px;
-        line-height: 1.75;
-        color: rgba(255,255,255,.82);
-        font-weight: 650;
-        max-width: 92ch;
-      }
-      .xp-bullets li{ display:flex; gap:10px; align-items:flex-start; }
-      .xp-bullets li::before{
-        content:"";
-        width:8px; height:8px; border-radius:50%;
-        margin-top: 9px;
-        flex: 0 0 8px;
-        background: linear-gradient(90deg, rgba(0,212,255,.95), rgba(43,108,255,.9));
-        box-shadow: 0 0 0 6px rgba(0,212,255,.08);
-      }
-
-      .xp-skills{
-        margin-top: 14px;
-        border-radius: 18px;
-        border: 1px solid rgba(255,255,255,.10);
-        background: rgba(0,0,0,.22);
-        padding: 14px;
-        max-width: 92ch;
-      }
-      .xp-skillsT{
-        margin:0 0 10px;
-        font-weight: 900;
-        color: rgba(255,255,255,.88);
-        font-size: 12px;
-        letter-spacing: .35px;
-        text-transform: uppercase;
-      }
-      .xp-chips{ display:flex; flex-wrap:wrap; gap:8px; }
-      .xp-chip{
-        font-size: 12px;
-        font-weight: 900;
-        color: rgba(255,255,255,.88);
-        padding: 7px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,.10);
-        background: rgba(255,255,255,.06);
-        white-space: nowrap;
-      }
-
-      /* Steps (scroll real) */
-      .xp-steps{ position:relative; z-index:1; }
-      .xp-step{ height: 120vh; }
-
-      /* Fade simple */
-      .xp-fade{ opacity:0; transform: translateY(8px); transition: .25s ease; }
-      .xp-fade.is-in{ opacity:1; transform: translateY(0); }
-    `;
-    document.head.appendChild(css);
+// ======== DATA (más reciente primero) ========
+const EXPERIENCES = [
+  {
+    year: "2025",
+    role: "SOPORTE TÉCNICO INFORMÁTICO",
+    org: "Ministerio Público (Procuraduría de la República Dominicana)",
+    date: "Agosto 2025 - Presente",
+    bullets: [
+      "Diagnóstico y reparación de equipos (CPUs e impresoras en red).",
+      "Instalación, configuración y mantenimiento de sistemas en dependencias judiciales.",
+      "Resolución de incidencias de red, software y hardware (presencial y remoto).",
+      "Administración básica de dominios y usuarios en Office 365.",
+      "Medidas de seguridad informática y respaldos.",
+      "Inventarios, solicitudes a almacén y soporte multiusuario.",
+      "Seguimiento por tickets y apoyo en mejora de procesos."
+    ],
+    skills: ["Redes", "Hardware", "Office 365", "Seguridad", "Tickets", "Backups", "Soporte remoto"]
+  },
+  {
+    year: "2024",
+    role: "SOPORTE TÉCNICO",
+    org: "Negosur (Loteka)",
+    date: "Junio 2024 - Agosto 2025",
+    bullets: [
+      "Diagnóstico y reparación (CPUs, impresoras, escáneres y sistemas POS).",
+      "Instalación, configuración y mantenimiento en sucursales.",
+      "Resolución de fallos de red, software y hardware (presencial y remoto).",
+      "Análisis básico de incidencias para mejorar procesos."
+    ],
+    skills: ["POS", "Redes", "Hardware", "Troubleshooting", "Soporte en sucursales"]
+  },
+  {
+    year: "2024",
+    role: "PROFESOR DE PISO",
+    org: "Smart Fit Dominicanan",
+    date: "2024",
+    bullets: [
+      "Acompañamiento a clientes en piso.",
+      "Apoyo operativo y coordinación.",
+      "Comunicación efectiva y enfoque en servicio."
+    ],
+    skills: ["Servicio", "Comunicación", "Trabajo en equipo"]
+  },
+  {
+    year: "2019",
+    role: "ASESOR COMERCIAL",
+    org: "Urrutía Auto Import",
+    date: "2019",
+    bullets: [
+      "Atención al cliente y negociación.",
+      "Seguimiento de solicitudes y soporte comercial."
+    ],
+    skills: ["Ventas", "Negociación", "Atención al cliente", "Seguimiento"]
+  },
+  {
+    year: "2019",
+    role: "OPERADOR TÉCNICO",
+    org: "Trébol Cable",
+    date: "2019",
+    bullets: [
+      "Soporte técnico operativo y resolución de incidencias.",
+      "Coordinación y cumplimiento de tareas técnicas."
+    ],
+    skills: ["Soporte", "Operaciones", "Incidencias"]
+  },
+  {
+    year: "2016",
+    role: "SERVICIO AL CLIENTE Y SOPORTE OPERATIVO",
+    org: "Domino's Pizza",
+    date: "2016",
+    bullets: [
+      "Atención al cliente y soporte operativo.",
+      "Trabajo bajo presión y foco en calidad."
+    ],
+    skills: ["Servicio", "Rapidez", "Trabajo bajo presión"]
   }
+];
 
-  function getStageTop() {
-    const nav = qs(SEL.navbar);
-    if (!nav) return 84;
-    return Math.round(nav.getBoundingClientRect().height + 12);
-  }
+// ======== DOM (desktop scrolly) ========
+const scrollSpace = document.getElementById("scrollSpace");
+const stage = document.getElementById("stage");
+const scrolly = document.getElementById("timeline");
+const topbar = document.querySelector(".topbar");
 
-  // ========= ELEMENTOS =========
-  const scrolly = qs(SEL.scrolly);
-  const space = qs(SEL.scrollSpace) || qs(".scrollSpace");
-  const stage = qs(SEL.stage) || qs(".stage");
-  const nodes = qs(SEL.nodes);
-  const cardInner = qs(SEL.cardInner);
-  const activeLabel = qs(SEL.activeLabel);
-  const activeProg = qs(SEL.activeProg);
-  const mobile = qs(SEL.mobile);
+const rail = document.getElementById("rail");
+const nodesRoot = document.getElementById("nodes");
+const burstLayer = document.getElementById("burstLayer");
 
-  if (!scrolly || !space || !stage || !nodes || !cardInner || !activeLabel || !activeProg || !mobile) {
-    console.error("[experiencia.js] Faltan IDs requeridos. Revisa experiencia.html");
-    return;
-  }
+const activeLabel = document.getElementById("activeLabel");
+const activeProg = document.getElementById("activeProg");
+const cardInner = document.getElementById("cardInner");
 
-  injectCSS();
+// ======== DOM (mobile list) ========
+const mobileTimeline = document.getElementById("mobileTimeline");
 
-  // ========= Rail: reutiliza lo que tengas, o lo crea =========
-  const rail =
-    qs(SEL.rail) ||
-    stage.querySelector(".rail") ||
-    stage.querySelector("aside") ||
-    null;
+const isMobile = () => window.matchMedia("(max-width: 680px)").matches;
 
-  function ensureRailStructure() {
-    if (!rail) return;
+// ======== CONFIG ========
+const SEGMENT_VH = 100;
+const BURST_LIMIT = 7;
 
-    rail.classList.add("xp-rail");
+let lastIdx = -1;
+let raf = 0;
 
-    // railLine
-    let line = rail.querySelector(".xp-railLine") || rail.querySelector(".railLine");
-    if (!line) {
-      line = document.createElement("div");
-      rail.appendChild(line);
-    }
-    line.className = "xp-railLine";
+// ======== HELPERS ========
+function esc(s=""){
+  return String(s).replace(/[&<>"']/g, (c)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+function rand(min, max){ return Math.random() * (max - min) + min; }
+function colorClass(i){ return ["cyan","blue","pink"][i % 3]; }
 
-    // railFill
-    let fill = rail.querySelector(".xp-railFill") || rail.querySelector(".railFill");
-    if (!fill) {
-      fill = document.createElement("div");
-      rail.appendChild(fill);
-    }
-    fill.className = "xp-railFill";
+// ======== MOBILE BUILD ========
+function buildMobileTimeline(){
+  if (!mobileTimeline) return;
 
-    // traveler
-    let traveler = rail.querySelector(".xp-traveler") || rail.querySelector(".traveler");
-    if (!traveler) {
-      traveler = document.createElement("div");
-      rail.appendChild(traveler);
-    }
-    traveler.className = "xp-traveler";
-
-    // nodes container (id #nodes ya existe)
-    nodes.classList.add("xp-nodes");
-  }
-
-  // ========= Steps (para scroll real) =========
-  function ensureSteps() {
-    let steps = qs(SEL.steps);
-    if (!steps) {
-      steps = document.createElement("div");
-      steps.id = "steps";
-      space.appendChild(steps);
-    }
-    steps.className = "xp-steps";
-    steps.innerHTML = XP.map(() => `<div class="xp-step"></div>`).join("");
-    return steps;
-  }
-
-  // ========= Nodes =========
-  function buildNodes() {
-    nodes.innerHTML = "";
-    const total = XP.length;
-
-    XP.forEach((it, i) => {
-      const t = total === 1 ? 0 : i / (total - 1);
-      const topPct = t * 100;
-
-      const lab = document.createElement("div");
-      lab.className = "xp-label";
-      lab.style.top = `${topPct}%`;
-      lab.textContent = it.year;
-
-      const dot = document.createElement("div");
-      dot.className = "xp-node";
-      dot.style.top = `${topPct}%`;
-      dot.dataset.i = String(i);
-
-      nodes.appendChild(lab);
-      nodes.appendChild(dot);
-    });
-  }
-
-  function setActiveNode(i) {
-    qsa(".xp-node", nodes).forEach((n) => n.classList.remove("is-active"));
-    const el = nodes.querySelector(`.xp-node[data-i="${i}"]`);
-    if (el) el.classList.add("is-active");
-  }
-
-  // ========= Render Card =========
-  let lastIndex = -1;
-
-  function renderCard(i) {
-    const it = XP[i];
-    if (!it) return;
-
-    activeLabel.textContent = it.role;
-
-    // fade
-    cardInner.classList.remove("is-in");
-    cardInner.classList.add("xp-fade");
-
-    const bullets = (it.bullets || []).map((b) => `<li>${esc(b)}</li>`).join("");
-    const chips = (it.skills || []).map((s) => `<span class="xp-chip">${esc(s)}</span>`).join("");
-
-    cardInner.innerHTML = `
-      <div class="xp-contentWrap">
-        <h3 class="xp-title">${esc(it.role)}</h3>
-        <p class="xp-org">${esc(it.org)}</p>
-        <p class="xp-date">${esc(it.date)}</p>
-        <div class="xp-divider"></div>
-        <ul class="xp-bullets">${bullets}</ul>
-        ${
-          chips
-            ? `<div class="xp-skills">
-                 <p class="xp-skillsT">Skills adquiridas</p>
-                 <div class="xp-chips">${chips}</div>
-               </div>`
-            : ""
-        }
-      </div>
-    `;
-
-    requestAnimationFrame(() => {
-      cardInner.classList.add("is-in");
-    });
-  }
-
-  // ========= Mobile Render =========
-  function renderMobile() {
-    // si tu CSS oculta/mostrar, esto solo pinta contenido
-    mobile.innerHTML = XP.map((it) => {
-      const bullets = (it.bullets || []).map((b) => `<li>${esc(b)}</li>`).join("");
-      const chips = (it.skills || []).map((s) => `<span class="xp-chip">${esc(s)}</span>`).join("");
-      return `
-        <div style="position:relative; padding-left:18px; margin: 16px 0 22px;">
-          <span style="position:absolute; left:0; top:10px; width:12px; height:12px; border-radius:50%;
-                       background:rgba(255,255,255,.95); border:2px solid rgba(0,212,255,.55);
-                       box-shadow:0 0 0 10px rgba(0,212,255,.08);" aria-hidden="true"></span>
-          <div style="display:inline-flex; margin:0 0 10px; padding:6px 10px; border-radius:999px;
-                      font-weight:900; font-size:12px; color:rgba(255,255,255,.86);
-                      border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.22);">
-            ${esc(it.year)}
-          </div>
-          <div style="border-radius:18px; border:1px solid rgba(255,255,255,.10);
-                      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-                      box-shadow:0 18px 60px rgba(0,0,0,.40); padding:18px;">
-            <h3 style="margin:0; font-size:18px; font-weight:900; line-height:1.15;">${esc(it.role)}</h3>
-            <p style="margin:8px 0 0; color:rgba(255,255,255,.72); font-weight:700; font-style:italic; font-size:13px;">
-              ${esc(it.org)}
-            </p>
-            <p style="margin:10px 0 0; color:rgba(255,255,255,.62); font-weight:900; font-size:12px;">
-              ${esc(it.date)}
-            </p>
-            <ul style="margin:12px 0 0; padding-left:16px; color:rgba(255,255,255,.82);
-                       font-weight:650; font-size:13px; line-height:1.65;">
-              ${bullets}
-            </ul>
-            ${chips ? `<div class="xp-chips" style="margin-top:12px;">${chips}</div>` : ""}
-          </div>
+  mobileTimeline.innerHTML = EXPERIENCES.map(exp => `
+    <div class="mItem">
+      <span class="mDot"></span>
+      <div class="mYear">${esc(exp.year)}</div>
+      <div class="mCard">
+        <h3 class="mRole">${esc(exp.role)}</h3>
+        <div class="mOrg">${esc(exp.org)}</div>
+        <div class="mDate">${esc(exp.date)}</div>
+        <ul class="mBullets">
+          ${exp.bullets.slice(0, 5).map(b => `<li>${esc(b)}</li>`).join("")}
+        </ul>
+        <div class="mSkills">
+          ${exp.skills.slice(0, 8).map(s => `<span class="mChip">${esc(s)}</span>`).join("")}
         </div>
-      `;
-    }).join("");
+      </div>
+    </div>
+  `).join("");
+}
+
+// ======== DESKTOP HEIGHT ========
+function setScrollHeight(){
+  if (!scrollSpace) return;
+  const segments = EXPERIENCES.length + 1;
+  scrollSpace.style.height = `${segments * SEGMENT_VH}vh`;
+}
+
+// ======== NODES ========
+function buildNodes(){
+  if (!nodesRoot) return;
+
+  nodesRoot.innerHTML = "";
+  const n = EXPERIENCES.length;
+
+  for (let i = 0; i < n; i++){
+    const pos = (i + 0.5) / n;
+    const node = document.createElement("div");
+    node.className = "node";
+    node.style.top = `calc(20px + (100% - 40px) * ${pos})`;
+
+    const label = document.createElement("div");
+    label.className = "label";
+    label.style.top = node.style.top;
+    label.textContent = EXPERIENCES[i].year;
+
+    nodesRoot.appendChild(label);
+    nodesRoot.appendChild(node);
   }
+}
 
-  // ========= Pin + Progress =========
-  function applyPin(rSpace, stageTop) {
-    // pin por JS (no depende de tu CSS)
-    const stickStart = stageTop;
-    const stageH = stage.getBoundingClientRect().height;
-    const stickEnd = stageTop + stageH;
+// ======== CARD RENDER ========
+function renderCard(idx){
+  const exp = EXPERIENCES[idx];
+  if (!exp || !cardInner) return;
 
-    // reset
-    stage.classList.add("xp-stage-pin");
-    stage.style.left = "0";
-    stage.style.width = "100%";
+  activeLabel.textContent = exp.role;
 
-    if (rSpace.top <= stickStart && rSpace.bottom >= stickEnd) {
-      // fixed
-      stage.style.position = "fixed";
-      stage.style.top = `${stageTop}px`;
-      stage.style.bottom = "auto";
-    } else if (rSpace.bottom < stickEnd) {
-      // bottom
-      stage.style.position = "absolute";
-      stage.style.top = "auto";
-      stage.style.bottom = "0";
-    } else {
-      // top
-      stage.style.position = "absolute";
-      stage.style.top = "0";
-      stage.style.bottom = "auto";
-    }
-  }
+  const html = `
+    <h2 class="role">${esc(exp.role)}</h2>
+    <div class="org">${esc(exp.org)}</div>
+    <div class="date">${esc(exp.date)}</div>
 
-  function onScroll() {
-    const stageTop = getStageTop();
-    document.documentElement.style.setProperty("--xpStageTop", `${stageTop}px`);
+    <div class="divider"></div>
 
-    const r = space.getBoundingClientRect();
-    applyPin(r, stageTop);
+    <ul class="bullets">
+      ${exp.bullets.map(b => `<li>${esc(b)}</li>`).join("")}
+    </ul>
 
-    // progreso robusto usando offset real del contenedor
-    const start = window.scrollY + r.top - stageTop;
-    const end = start + space.offsetHeight - (window.innerHeight - stageTop);
-    const denom = Math.max(1, end - start);
+    <div class="skillsBox">
+      <div class="t">Skills adquiridas</div>
+      <div class="chips">
+        ${exp.skills.map(s => `<span class="chip">${esc(s)}</span>`).join("")}
+      </div>
+    </div>
+  `;
 
-    const prog = clamp((window.scrollY - start) / denom, 0, 1);
-    document.documentElement.style.setProperty("--xpProg", prog.toFixed(4));
-    activeProg.textContent = `${Math.round(prog * 100)}%`;
+  cardInner.classList.remove("in");
+  setTimeout(() => {
+    cardInner.innerHTML = html;
+    requestAnimationFrame(() => cardInner.classList.add("in"));
+  }, 70);
+}
 
-    const idx = clamp(Math.round(prog * (XP.length - 1)), 0, XP.length - 1);
-    if (idx !== lastIndex) {
-      lastIndex = idx;
-      renderCard(idx);
-      setActiveNode(idx);
-    }
-  }
+// ======== SKILL BURST ========
+function spawnSkillBurst(idx){
+  if (!rail || !burstLayer) return;
 
-  // ========= INIT =========
-  function init() {
-    ensureRailStructure();
-    ensureSteps();
-    buildNodes();
-    renderMobile();
-    renderCard(0);
-    setActiveNode(0);
-    onScroll();
+  burstLayer.innerHTML = "";
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-  }
+  const exp = EXPERIENCES[idx];
+  if (!exp?.skills?.length) return;
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+  const nodes = nodesRoot.querySelectorAll(".node");
+  const activeNode = nodes[idx];
+  if (!activeNode) return;
+
+  const railRect = rail.getBoundingClientRect();
+  const nodeRect = activeNode.getBoundingClientRect();
+
+  const y = (nodeRect.top - railRect.top) + (nodeRect.height / 2);
+
+  const skills = exp.skills.slice(0, BURST_LIMIT);
+
+  skills.forEach((name, i) => {
+    const orb = document.createElement("div");
+    orb.className = `skillOrb ${colorClass(i)}`;
+    orb.textContent = name;
+
+    const tx = rand(24, 140);
+    const ty = rand(-80, 80);
+
+    orb.style.top = `${y}px`;
+    orb.style.setProperty("--tx", `${tx.toFixed(0)}px`);
+    orb.style.setProperty("--ty", `${ty.toFixed(0)}px`);
+    orb.style.animationDelay = `${(i * 0.06).toFixed(2)}s`;
+
+    burstLayer.appendChild(orb);
+  });
+}
+
+// ======== PIN STAGE (desktop) ========
+function updateStagePin(){
+  if (!stage || !scrollSpace || !scrolly) return;
+
+  const navH = topbar ? topbar.getBoundingClientRect().height : 64;
+  const stageTop = Math.round(navH + 10);
+  document.documentElement.style.setProperty("--stageTop", `${stageTop}px`);
+
+  const spaceRect = scrollSpace.getBoundingClientRect();
+  const spaceTop = spaceRect.top + window.scrollY;
+  const spaceH = scrollSpace.offsetHeight;
+
+  const stageH = Math.max(520, window.innerHeight - stageTop - 18);
+
+  const startY = spaceTop;
+  const endY = spaceTop + spaceH - stageH;
+
+  const y = window.scrollY;
+
+  const scrollyRect = scrolly.getBoundingClientRect();
+  const left = Math.round(scrollyRect.left);
+  const width = Math.round(scrollyRect.width);
+
+  if (y < startY) {
+    stage.classList.remove("is-fixed", "is-bottom");
+    stage.style.left = "";
+    stage.style.width = "";
+    stage.style.height = `${stageH}px`;
+  } else if (y >= startY && y < endY) {
+    stage.classList.add("is-fixed");
+    stage.classList.remove("is-bottom");
+    stage.style.left = `${left}px`;
+    stage.style.width = `${width}px`;
+    stage.style.height = `${stageH}px`;
   } else {
-    init();
+    stage.classList.remove("is-fixed");
+    stage.classList.add("is-bottom");
+    stage.style.left = "";
+    stage.style.width = "";
+    stage.style.height = `${stageH}px`;
   }
-})();
+}
+
+// ======== UPDATE (desktop) ========
+function update(){
+  raf = 0;
+  if (!scrollSpace || !nodesRoot) return;
+
+  updateStagePin();
+
+  const rect = scrollSpace.getBoundingClientRect();
+  const viewH = window.innerHeight || 800;
+
+  const total = rect.height - viewH;
+  const passed = -rect.top;
+  const prog = clamp(total > 0 ? passed / total : 0, 0, 1);
+
+  document.documentElement.style.setProperty("--prog", prog.toFixed(4));
+  if (activeProg) activeProg.textContent = `${Math.round(prog * 100)}%`;
+
+  const n = EXPERIENCES.length;
+  const seg = prog * n;
+  const idx = clamp(Math.floor(seg), 0, n - 1);
+
+  const nodeEls = nodesRoot.querySelectorAll(".node");
+  nodeEls.forEach((el, i) => el.classList.toggle("active", i === idx));
+
+  if (idx !== lastIdx){
+    lastIdx = idx;
+    renderCard(idx);
+    spawnSkillBurst(idx);
+  }
+}
+
+function onScroll(){
+  if (raf) return;
+  raf = requestAnimationFrame(update);
+}
+
+// ======== INIT ========
+function init(){
+  // Siempre construimos la vista móvil (si existe contenedor)
+  buildMobileTimeline();
+
+  // Si es móvil, NO inicializamos scrollytelling (está oculto por CSS)
+  if (isMobile()) return;
+
+  // Desktop scrollytelling
+  setScrollHeight();
+  buildNodes();
+  renderCard(0);
+  spawnSkillBurst(0);
+
+  requestAnimationFrame(() => {
+    if (cardInner) cardInner.classList.add("in");
+    update();
+  });
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+}
+
+init();
+
+// Reaccionar al resize: si cambia a móvil/desktop, recargar lógica simple
+window.addEventListener("resize", () => {
+  // reconstruye móvil siempre
+  buildMobileTimeline();
+
+  // si pasamos a desktop, re-init básico
+  if (!isMobile()){
+    setScrollHeight();
+    buildNodes();
+    lastIdx = -1;
+    update();
+  }
+});

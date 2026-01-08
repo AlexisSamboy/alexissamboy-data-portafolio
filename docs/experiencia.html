@@ -11,31 +11,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
-
+ 
   <!-- Icons -->
   <link rel="icon" href="././img/favicon/favicon.svg" sizes="any">
   <link rel="icon" href="././img/favicon/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="././img/favicon/favicon-180.png">
   <link rel="icon" type="image/png" sizes="32x32" href="././img/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="././img/favicon/favicon-16.png">
-
-  <!-- ✅ Mantén tu CSS del index SOLO para el NAV/estilos globales -->
-  <link rel="stylesheet" href="./style.css" />
-
+  
   <style>
     :root{
       --bg0:#05060a;
       --bg1:#070a14;
+
       --txt: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.66);
+
       --blue:#2b6cff;
       --cyan:#00d4ff;
       --pink:#ff2b6a;
+
       --shadow: 0 26px 100px rgba(0,0,0,.62);
       --radius: 28px;
 
       --prog: 0;
-      --stageTop: 84px; /* JS lo ajusta al alto real del nav */
+      --stageTop: 84px;
     }
 
     *{ box-sizing:border-box; }
@@ -63,21 +63,93 @@
       opacity:.55;
       pointer-events:none;
     }
-
     .app{ position:relative; z-index:1; }
 
-    /* ✅ evita que el nav fijo tape el contenido */
-    .xp-main{
+    /* NAV */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(5,6,10,.80), rgba(5,6,10,.35));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .topbar .inner{
+      width:min(1200px, 92vw);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color: var(--txt);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .brand img{
+      width:38px; height:38px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+    }
+    .navlinks{
+      display:flex;
+      gap: 18px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .navlinks a{
+      color: rgba(255,255,255,.78);
+      text-decoration:none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: .18s ease;
+    }
+    .navlinks a:hover{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.95);
+    }
+    .navlinks a.active{
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border: 1px solid rgba(43,108,255,.45);
+      background: rgba(43,108,255,.12);
+      color: rgba(255,255,255,.92);
+      padding: 10px 14px;
+      border-radius: 14px;
+      text-decoration:none;
+      font-weight: 800;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      transition: .18s ease;
+      white-space:nowrap;
+    }
+    .cta:hover{ transform: translateY(-1px); background: rgba(43,108,255,.18); }
+    @media (max-width: 680px){ .navlinks{ display:none; } }
+
+    .wrap{
       width:min(1200px, 92vw);
       margin: 18px auto 120px;
-      padding-top: 84px; /* fallback */
-    }
-    @media (max-width: 680px){
-      .xp-main{ padding-top: 74px; }
     }
 
     /* HERO */
-    .xp-hero{
+    .hero{
       border-radius: var(--radius);
       border: 1px solid rgba(255,255,255,.10);
       background:
@@ -89,7 +161,7 @@
       position:relative;
       padding: 38px 34px;
     }
-    .xp-hero::after{
+    .hero::after{
       content:"";
       position:absolute; inset:-2px;
       background: linear-gradient(90deg, rgba(0,212,255,.10), rgba(43,108,255,.10), rgba(255,43,106,.06));
@@ -97,9 +169,9 @@
       opacity:.72;
       pointer-events:none;
     }
-    .xp-hero > *{ position:relative; z-index:2; }
+    .hero > *{ position:relative; z-index:2; }
 
-    .xp-kicker{
+    .kicker{
       display:inline-flex;
       gap:10px;
       align-items:center;
@@ -114,32 +186,32 @@
       text-transform:uppercase;
       width:fit-content;
     }
-    .xp-dot{
+    .dot{
       width:10px;height:10px;border-radius:50%;
       background: linear-gradient(90deg, var(--cyan), var(--blue));
       box-shadow: 0 0 0 6px rgba(0,212,255,.12);
     }
-    .xp-hero h1{
+    h1{
       margin: 14px 0 10px;
       font-size: clamp(32px, 4vw, 56px);
       line-height: 1.03;
       letter-spacing: -1px;
     }
-    .xp-sub{
+    .sub{
       margin:0;
       max-width: 80ch;
       color: var(--muted);
       font-size: 16px;
       line-height: 1.75;
     }
-    .xp-actions{
+    .heroActions{
       margin-top: 18px;
       display:flex;
       gap:12px;
       flex-wrap:wrap;
       align-items:center;
     }
-    .xp-btn{
+    .btn{
       display:inline-flex;
       gap:10px;
       align-items:center;
@@ -153,23 +225,23 @@
       box-shadow: 0 16px 44px rgba(0,0,0,.35);
       transition:.18s ease;
     }
-    .xp-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
-    .xp-btn.primary{
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
+    .btn.primary{
       border-color: rgba(0,212,255,.24);
       background: rgba(0,212,255,.12);
     }
 
     /* ===== Desktop scrollytelling ===== */
-    .xp-scrolly{
+    .scrolly{
       margin-top: 18px;
       border-radius: var(--radius);
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
       box-shadow: var(--shadow);
+      overflow: visible !important;
       position:relative;
-      overflow:hidden;
     }
-    .xp-scrolly::after{
+    .scrolly::after{
       content:"";
       position:absolute; inset:-2px;
       background: radial-gradient(800px 520px at 30% 20%, rgba(0,212,255,.10), transparent 60%),
@@ -179,17 +251,16 @@
       pointer-events:none;
     }
 
-    .xp-scrollSpace{
+    .scrollSpace{
       position:relative;
-      height: 520vh; /* JS lo ajusta */
+      height: 600vh; /* JS ajusta */
       min-height: 1400px;
       z-index:2;
     }
 
-    /* ✅ sticky (más estable que fixed) */
-    .xp-stage{
-      position: sticky;
-      top: var(--stageTop);
+    .stage{
+      position:absolute;
+      inset: 0 auto auto 0;
       width: 100%;
       padding: 28px;
       display:grid;
@@ -197,15 +268,28 @@
       gap: 28px;
       z-index: 3;
       height: calc(100vh - var(--stageTop) - 18px);
-      align-content: start;
+    }
+    .stage.is-fixed{
+      position:fixed;
+      top: var(--stageTop);
+      left: 0;
+      width: 100%;
+      height: calc(100vh - var(--stageTop) - 18px);
+    }
+    .stage.is-bottom{
+      position:absolute;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
 
-    .xp-rail{
+    .rail{
       position:relative;
       padding-top: 10px;
       border-radius: 22px;
     }
-    .xp-railLine{
+    .railLine{
       position:absolute;
       left: 74px;
       top: 20px;
@@ -214,7 +298,7 @@
       border-radius: 999px;
       background: rgba(255,255,255,.10);
     }
-    .xp-railFill{
+    .railFill{
       position:absolute;
       left: 74px;
       top: 20px;
@@ -224,7 +308,7 @@
       background: linear-gradient(180deg, rgba(0,212,255,.95), rgba(43,108,255,.9));
       box-shadow: 0 0 22px rgba(0,212,255,.18);
     }
-    .xp-traveler{
+    .traveler{
       position:absolute;
       left: 74px;
       top: calc(20px + (100% - 40px) * var(--prog));
@@ -237,7 +321,7 @@
       box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 26px rgba(0,212,255,.20);
     }
 
-    .xp-nodes{
+    .nodes{
       position:absolute;
       left: 0;
       top: 20px;
@@ -245,7 +329,7 @@
       width: 100%;
       pointer-events:none;
     }
-    .xp-node{
+    .node{
       position:absolute;
       left: 74px;
       transform: translate(-50%, -50%);
@@ -258,14 +342,25 @@
       opacity:.55;
       transition:.25s ease;
     }
-    .xp-node.active{
+    .node.active{
       opacity: 1;
       background: rgba(255,255,255,.95);
       border-color: rgba(0,212,255,.35);
       box-shadow: 0 0 0 10px rgba(0,212,255,.10), 0 0 24px rgba(0,212,255,.12);
     }
-
-    .xp-label{
+    .node.active::after{
+      content:"";
+      position:absolute;
+      inset:-14px;
+      border-radius:50%;
+      border: 2px solid rgba(0,212,255,.22);
+      animation: nodePulse 1.8s ease-out infinite;
+    }
+    @keyframes nodePulse{
+      0%{ opacity:.9; transform: scale(.75); }
+      100%{ opacity:0; transform: scale(2.1); }
+    }
+    .label{
       position:absolute;
       left: 0;
       transform: translateY(-50%);
@@ -275,16 +370,50 @@
       font-weight: 900;
       color: rgba(255,255,255,.62);
       letter-spacing: .3px;
-      opacity:.95;
+      opacity:.9;
     }
 
-    .xp-right{
+    .burstLayer{
+      position:absolute;
+      inset: 0;
+      pointer-events:none;
+      overflow: visible;
+    }
+    .skillOrb{
+      position:absolute;
+      left: 96px;
+      transform: translateY(-50%);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,.90);
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.30);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      white-space: nowrap;
+      opacity: 0;
+      animation: orbFly 1.35s ease-out forwards;
+      backdrop-filter: blur(8px);
+    }
+    .skillOrb.cyan{ border-color: rgba(0,212,255,.26); background: rgba(0,212,255,.10); }
+    .skillOrb.blue{ border-color: rgba(43,108,255,.26); background: rgba(43,108,255,.10); }
+    .skillOrb.pink{ border-color: rgba(255,43,106,.26); background: rgba(255,43,106,.10); }
+    @keyframes orbFly{
+      0%{ opacity:0; transform: translateY(-50%) translateX(0) scale(.95); }
+      12%{ opacity:1; }
+      100%{ opacity:0; transform: translateY(calc(-50% + var(--ty))) translateX(var(--tx)) scale(1); }
+    }
+
+    .content{
+      position:relative;
+      min-height: 0;
       display:grid;
       grid-template-rows: auto 1fr;
       gap: 14px;
-      min-height: 0;
+      padding-right: 4px;
     }
-    .xp-headRow{
+    .headRow{
       display:flex;
       justify-content:space-between;
       gap:12px;
@@ -292,14 +421,14 @@
       flex-wrap:wrap;
       padding: 6px 0 0;
     }
-    .xp-small{
+    .headRow .small{
       color: rgba(255,255,255,.68);
       font-weight: 800;
       font-size: 13px;
     }
-    .xp-small b{ color: rgba(255,255,255,.92); }
+    .headRow .small b{ color: rgba(255,255,255,.92); }
 
-    .xp-card{
+    .card{
       position:relative;
       border-radius: 22px;
       border:1px solid rgba(255,255,255,.10);
@@ -309,7 +438,7 @@
       padding: 28px;
       min-height: 0;
     }
-    .xp-card::after{
+    .card::after{
       content:"";
       position:absolute; inset:-2px;
       background: radial-gradient(700px 520px at 20% 25%, rgba(0,212,255,.09), transparent 62%),
@@ -318,14 +447,15 @@
       opacity:.75;
       pointer-events:none;
     }
-    .xp-card > *{ position:relative; z-index:2; }
+    .card > *{ position:relative; z-index:2; }
 
-    .xp-role{ margin:0; font-size: 24px; font-weight: 900; letter-spacing:.2px; line-height:1.12; }
-    .xp-org{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 14px; }
-    .xp-date{ margin: 12px 0 0; color: rgba(255,255,255,.65); font-weight: 900; font-size: 13px; }
-    .xp-divider{ height:1px; margin: 18px 0; background: rgba(255,255,255,.08); }
+    .role{ margin:0; font-size: 24px; font-weight: 900; letter-spacing:.2px; line-height:1.12; }
+    .org{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 14px; }
+    .date{ margin: 12px 0 0; color: rgba(255,255,255,.65); font-weight: 900; font-size: 13px; }
 
-    .xp-bullets{
+    .divider{ height:1px; margin: 18px 0; background: rgba(255,255,255,.08); }
+
+    .bullets{
       margin:0;
       padding:0;
       list-style:none;
@@ -337,8 +467,8 @@
       font-weight: 650;
       max-width: 92ch;
     }
-    .xp-bullets li{ display:flex; gap:10px; align-items:flex-start; }
-    .xp-bullets li::before{
+    .bullets li{ display:flex; gap:10px; align-items:flex-start; }
+    .bullets li::before{
       content:"";
       width: 8px;
       height: 8px;
@@ -349,7 +479,7 @@
       box-shadow: 0 0 0 6px rgba(0,212,255,.08);
     }
 
-    .xp-skillsBox{
+    .skillsBox{
       margin-top: 14px;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,.10);
@@ -357,7 +487,7 @@
       padding: 14px;
       max-width: 92ch;
     }
-    .xp-skillsTitle{
+    .skillsBox .t{
       margin:0 0 10px;
       font-weight: 900;
       color: rgba(255,255,255,.88);
@@ -365,8 +495,8 @@
       letter-spacing:.35px;
       text-transform: uppercase;
     }
-    .xp-chips{ display:flex; flex-wrap:wrap; gap:8px; }
-    .xp-chip{
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+    .chip{
       font-size: 12px;
       font-weight: 900;
       color: rgba(255,255,255,.88);
@@ -377,11 +507,11 @@
       white-space:nowrap;
     }
 
-    .xp-fade{ opacity:0; transform: translateY(8px); transition: .25s ease; }
-    .xp-fade.in{ opacity:1; transform: translateY(0); }
+    .fade{ opacity:0; transform: translateY(8px); transition: .25s ease; }
+    .fade.in{ opacity:1; transform: translateY(0); }
 
-    /* ===== Mobile timeline list ===== */
-    .xp-mobileTimeline{
+    /* ===== Mobile timeline list (no pin, all cards) ===== */
+    .mobileTimeline{
       display:none;
       margin-top: 18px;
       border-radius: var(--radius);
@@ -392,7 +522,7 @@
       position:relative;
       padding: 18px;
     }
-    .xp-mobileTimeline::after{
+    .mobileTimeline::after{
       content:"";
       position:absolute; inset:-2px;
       background: radial-gradient(800px 520px at 30% 20%, rgba(0,212,255,.10), transparent 60%),
@@ -401,10 +531,14 @@
       opacity:.65;
       pointer-events:none;
     }
-    .xp-mobileTimeline > *{ position:relative; z-index:2; }
+    .mobileTimeline > *{ position:relative; z-index:2; }
 
-    .xp-mItem{ position:relative; padding-left: 18px; margin: 16px 0 22px; }
-    .xp-mItem::before{
+    .mItem{
+      position:relative;
+      padding-left: 18px;
+      margin: 16px 0 22px;
+    }
+    .mItem::before{
       content:"";
       position:absolute;
       left: 5px;
@@ -413,9 +547,9 @@
       width: 2px;
       background: rgba(255,255,255,.10);
     }
-    .xp-mItem:last-child::before{ bottom: 10px; }
+    .mItem:last-child::before{ bottom: 10px; }
 
-    .xp-mDot{
+    .mDot{
       position:absolute;
       left: 0;
       top: 10px;
@@ -426,7 +560,7 @@
       border: 2px solid rgba(0,212,255,.55);
       box-shadow: 0 0 0 10px rgba(0,212,255,.08);
     }
-    .xp-mYear{
+    .mYear{
       display:inline-flex;
       margin: 0 0 10px;
       padding: 6px 10px;
@@ -438,20 +572,34 @@
       border: 1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.22);
     }
-    .xp-mCard{
+    .mCard{
       border-radius: 18px;
       border:1px solid rgba(255,255,255,.10);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
       box-shadow: 0 18px 60px rgba(0,0,0,.40);
       padding: 18px;
     }
-    .xp-mRole{ margin:0; font-size: 18px; font-weight: 900; line-height:1.15; }
-    .xp-mOrg{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 13px; }
-    .xp-mDate{ margin: 10px 0 0; color: rgba(255,255,255,.62); font-weight: 900; font-size: 12px; }
-    .xp-mBullets{ margin: 12px 0 0; padding-left: 16px; color: rgba(255,255,255,.82); font-weight: 650; font-size: 13px; line-height: 1.65; }
-    .xp-mBullets li{ margin: 6px 0; }
-    .xp-mSkills{ margin-top: 12px; display:flex; flex-wrap:wrap; gap:8px; }
-    .xp-mChip{
+    .mRole{ margin:0; font-size: 18px; font-weight: 900; line-height:1.15; }
+    .mOrg{ margin: 8px 0 0; color: rgba(255,255,255,.72); font-weight: 700; font-style: italic; font-size: 13px; }
+    .mDate{ margin: 10px 0 0; color: rgba(255,255,255,.62); font-weight: 900; font-size: 12px; }
+
+    .mBullets{
+      margin: 12px 0 0;
+      padding-left: 16px;
+      color: rgba(255,255,255,.82);
+      font-weight: 650;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .mBullets li{ margin: 6px 0; }
+
+    .mSkills{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .mChip{
       font-size: 11px;
       font-weight: 900;
       color: rgba(255,255,255,.88);
@@ -463,14 +611,16 @@
     }
 
     @media (max-width: 680px){
-      .xp-scrolly{ display:none; }
-      .xp-mobileTimeline{ display:block; }
-      .xp-hero{ padding: 28px 20px; }
-      .xp-main{ padding-top: 74px; }
+      /* en móvil mostramos la lista y ocultamos scrollytelling */
+      .scrolly{ display:none; }
+      .mobileTimeline{ display:block; }
+      .hero{ padding: 28px 20px; }
     }
 
     @media (prefers-reduced-motion: reduce){
-      .xp-fade{ transition:none; }
+      .node.active::after{ animation:none; }
+      .skillOrb{ display:none; }
+      .fade{ transition:none; }
     }
   </style>
 </head>
@@ -479,86 +629,69 @@
   <canvas id="ambient" aria-hidden="true"></canvas>
 
   <div class="app">
-
-    <!-- NAV (igual que index) -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <a class="logo" href="./index.html#home">
-          <img src="./img/logo-nav.png" alt="Alexis Samboy" />
+    <header class="topbar">
+      <div class="inner">
+        <a class="brand" href="./index.html">
+          <img src="./img/logo-nav.png" alt="Alexis Samboy" onerror="this.style.display='none'">
         </a>
 
-        <button class="nav-toggle" type="button"
-          aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
-          <span class="nav-toggle__icon" aria-hidden="true">
-            <span class="sq"></span><span class="sq"></span><span class="sq"></span>
-          </span>
-          <span class="nav-toggle__text">MENU</span>
-        </button>
+        <nav class="navlinks" aria-label="Navegación">
+          <a href="./index.html#about">Sobre mí</a>
+          <a class="active" href="./experiencia.html">Experiencia</a>
+          <a href="https://github.com/AlexisSamboy/alexissamboy-data-portafolio/tree/main/proyectos">Proyectos</a>
+          <a href="./certificaciones.html">Certificaciones</a>
+        </nav>
 
-        <ul class="nav-menu" id="navMenu">
-          <li><a href="./index.html#about">Sobre mí</a></li>
-          <li><a href="./experiencia.html" class="active">Experiencia</a></li>
-          <li><a href="./index.html#projects">Proyectos</a></li>
-          <li><a href="./certificaciones.html">Certificaciones</a></li>
-
-          <li class="nav-only-mobile">
-            <a class="nav-cta" href="./index.html#contact">Contactar</a>
-          </li>
-        </ul>
-
-        <a class="btn-contact" href="./index.html#contact">Contactar</a>
+        <a class="cta" href="./index.html#contact">Contactar</a>
       </div>
-    </nav>
+    </header>
 
-    <main class="xp-main">
-      <section class="xp-hero">
-        <div class="xp-kicker"><span class="xp-dot"></span> Storyline • Timeline</div>
+    <main class="wrap">
+      <section class="hero">
+        <div class="kicker"><span class="dot"></span> Storyline • Timeline</div>
         <h1>Experiencia</h1>
-        <p class="xp-sub">
+        <p class="sub">
           En desktop: scrollytelling (una escena a la vez). En móvil: timeline vertical completa (todas las experiencias).
         </p>
-        <div class="xp-actions">
-          <a class="xp-btn primary" href="#timeline">Ver experiencia →</a>
-          <a class="xp-btn" href="./index.html#contact">Hablemos</a>
+        <div class="heroActions">
+          <a class="btn primary" href="#timeline">Ver experiencia →</a>
+          <a class="btn" href="./index.html#contact">Hablemos</a>
         </div>
       </section>
 
-      <!-- MÓVIL -->
-      <section class="xp-mobileTimeline" id="mobileTimeline"></section>
+      <!-- ✅ MÓVIL: lista completa -->
+      <section class="mobileTimeline" id="mobileTimeline"></section>
 
-      <!-- DESKTOP -->
-      <section id="timeline" class="xp-scrolly">
-        <div class="xp-scrollSpace" id="scrollSpace">
-  <div class="xp-stage" id="stage">
-    <aside class="xp-rail" aria-hidden="true">
-      <div class="xp-railLine"></div>
-      <div class="xp-railFill"></div>
-      <div class="xp-traveler"></div>
-      <div class="xp-nodes" id="nodes"></div>
-    </aside>
+      <!-- ✅ DESKTOP: scrollytelling -->
+      <section id="timeline" class="scrolly">
+        <div class="scrollSpace" id="scrollSpace">
+          <div class="stage" id="stage">
+            <aside class="rail" id="rail" aria-hidden="true">
+              <div class="railLine"></div>
+              <div class="railFill"></div>
+              <div class="traveler"></div>
+              <div class="nodes" id="nodes"></div>
+              <div class="burstLayer" id="burstLayer"></div>
+            </aside>
 
-    <section class="xp-right">
-      <div class="xp-headRow">
-        <div class="xp-small">Activo: <b id="activeLabel">—</b></div>
-        <div class="xp-small">Progreso: <b id="activeProg">0%</b></div>
-      </div>
+            <section class="content">
+              <div class="headRow">
+                <div class="small">Activo: <b id="activeLabel">—</b></div>
+                <div class="small">Progreso: <b id="activeProg">0%</b></div>
+              </div>
 
-      <article class="xp-card">
-        <div id="cardInner" class="xp-fade"></div>
-      </article>
-    </section>
-  </div>
-
-  <!-- ✅ ESTO ES LO QUE FALTABA: genera altura real de scroll -->
-  <div class="xp-steps" id="steps" aria-hidden="true"></div>
-</div>
+              <article class="card">
+                <div id="cardInner" class="fade"></div>
+              </article>
+            </section>
+          </div>
+        </div>
       </section>
+
     </main>
   </div>
 
   <script src="./interactive-bg.js"></script>
-<script src="./experiencia.js"></script>
-<script src="./script.js"></script>
-
+  <script src="./experiencia.js"></script>
 </body>
 </html>
