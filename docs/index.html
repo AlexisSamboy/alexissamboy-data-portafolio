@@ -35,15 +35,29 @@
         <img src="./img/logo-nav.png" alt="Alexis Samboy" />
       </a>
 
-      <ul class="nav-menu">
-        <li><a href="#about">Sobre mí</a></li>
-        <li><a href="./experiencia.html">Experiencia</a></li>
-        <li><a href="https://github.com/AlexisSamboy/alexissamboy-data-portafolio/tree/main/proyectos">Proyectos</a></li>
-        <li><a href="./certificaciones.html">Certificaciones</a></li>
-      </ul>
+      <!-- BOTÓN MENU (MÓVIL) -->
+<button class="nav-toggle" type="button"
+  aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
+  <span class="nav-toggle__icon" aria-hidden="true">
+    <span class="sq"></span><span class="sq"></span><span class="sq"></span>
+  </span>
+  <span class="nav-toggle__text">MENU</span>
+</button>
 
-      <a class="btn-contact" href="https://www.instagram.com/alexis_samboy/">Contactar</a>
-    </div>
+<!-- AGREGA ID AQUÍ -->
+<ul class="nav-menu" id="navMenu">
+  <!-- tus links -->
+  <li><a href="#about">Sobre mí</a></li>
+  <li><a href="./experiencia.html">Experiencia</a></li>
+  <li><a href="https://github.com/AlexisSamboy/alexissamboy-data-portafolio/tree/main/proyectos">Proyectos</a></li>
+  <li><a href="./certificaciones.html">Certificaciones</a></li>
+
+  <!-- CONTACTAR dentro del menú (solo móvil) -->
+  <li class="nav-only-mobile">
+    <a class="nav-cta" href="./index.html#contact">Contactar</a>
+  </li>
+</ul>
+
   </nav>
 
   <!-- HERO -->

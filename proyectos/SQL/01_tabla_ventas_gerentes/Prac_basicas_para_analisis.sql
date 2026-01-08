@@ -159,3 +159,23 @@ left join YTGerente on YTVentas.Id_gerente = YTVentas.Id_gerente
 SELECT * FROM YTVentas
 left join YTProducto on YTVentas.Id_producto = YTVentas.ID_producto
 left join YTGerente on YTVentas.Id_gerente = YTVentas.Id_gerente
+
+--Buscar registro en YTVentas tomando como referencia la tabla gerentes
+
+SELECT * FROM YTVentas
+right join YTGerente on YTVentas.Id_gerente = YTGerente.Id_gerente
+
+--Buscar registro en YTGerentes donde solo vengan los gerente que si tienen datos registrados
+
+SELECT * FROM YTVentas
+inner join YTGerente on YTVentas.Id_gerente = YTGerente.Id_gerente
+order by YTGerente.Id_gerente
+
+--Buscar todos los registros incluso si no hay coincidencias en alguna de las tablas
+
+SELECT * FROM YTVentas
+full outer join YTGerente on YTVentas.Id_gerente = YTGerente.Id_gerente
+order by YTGerente.Id_gerente
+
+--SUB QUERY o SUB CONSULTAS
+
