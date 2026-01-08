@@ -15,7 +15,7 @@ Está pensado para **demostrar lógica de programación en Python** y que cualqu
 
 Haz clic en el botón:
 
-[![Open In Colab](https://colab.research.google.com/github/AlexisSamboy/alexissamboy-data-portafolio/blob/main/proyectos/python/calculadora_nomina-rd/calculadora_nomina_rd.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AlexisSamboy/alexissamboy-data-portafolio/blob/main/proyectos/python/calculadora_nomina-rd/calculadora_nomina_rd.ipynb)
 
 
 ---
