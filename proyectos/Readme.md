@@ -17,7 +17,7 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 | Carpeta | Contenido |
 |----------|------------|
 | [`excel_projects`](./excel_projects) | Dashboards y reportes interactivos en Excel |
-| [`python_projects`](./python_projects`) | Notebooks y scripts en Python |
+| [`python_projects`](./python_projects) | Notebooks y scripts en Python |
 | [`sql_projects`](./sql_projects) | Consultas y ejercicios prácticos en SQL |
 | [`power-bi_projects`](./power-bi_projects) | Informes y dashboards en Power BI |
 
