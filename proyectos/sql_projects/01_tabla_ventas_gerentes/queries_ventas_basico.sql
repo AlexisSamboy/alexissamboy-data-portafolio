@@ -118,19 +118,19 @@ ORDER BY Total_Ventas DESC;
 /* 13) JOIN (unir ventas con productos y gerentes)
 */
 SELECT TOP 100
-    v.fecha,
-    v.ciudad,
-    v.precio,
-    v.cantidad,
-    (v.precio * v.cantidad) AS Total,
-    p.Nombre AS Producto,          
-    g.Gerente                   
-FROM YTVentas v
-LEFT JOIN YTProducto p
-    ON v.Id_producto = p.Id_producto
-LEFT JOIN YTGerente g
-    ON v.Id_gerente = g.Id_gerente
-ORDER BY v.fecha DESC;
+    YTVentas.Fecha,
+    YTVentas.ciudad,
+    YTVentas.precio,
+    YTVentas.cantidad,
+    (YTVentas.precio * YTVentas.cantidad) AS Total,
+    YTProducto.Producto AS Producto,          
+    YTGerente.Gerente                   
+FROM YTVentas 
+LEFT JOIN YTProducto 
+    ON YTVentas.Id_producto = YTProducto.Id_producto
+LEFT JOIN YTGerente 
+    ON YTVentas.Id_gerente = YTGerente.Id_gerente
+ORDER BY YTVentas.fecha DESC;
 
 
 /* 14) Ventas sin gerente asignado */
