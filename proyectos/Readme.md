@@ -16,10 +16,10 @@ Bienvenido a mi repositorio dedicado al **análisis de datos**, donde documento 
 ## 📁 Estructura del repositorio
 | Carpeta | Contenido |
 |----------|------------|
-| [`Excel`](./Excel) | Dashboards y reportes interactivos en Excel |
-| [`Python`](./python) | Notebooks y scripts en Python |
-| [`SQL`](./sql) | Consultas y ejercicios prácticos en SQL |
-| [`Power-BI`](./Power-BI) | Informes y dashboards en Power BI |
+| [`excel_projects`](./excel_projects) | Dashboards y reportes interactivos en Excel |
+| [`python_projects`](./python_projects`) | Notebooks y scripts en Python |
+| [`sql_projects`](./sql_projects) | Consultas y ejercicios prácticos en SQL |
+| [`power-bi_projects`](./power-bi_projects) | Informes y dashboards en Power BI |
 
 ---
 
