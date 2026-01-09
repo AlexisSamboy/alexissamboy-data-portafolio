@@ -8,8 +8,8 @@ Colección de ejercicios en **SQL Server** donde diseño una base de datos de ej
 
 | # | Proyecto                                      | Descripción                                                                                 | Archivo |
 |---|----------------------------------------------|---------------------------------------------------------------------------------------------|---------|
-| 1 | **Creación de pequeña base de datos**        | Script que crea una base de datos de ejemplo y define tablas y relaciones básicas.         | [`clientes_db.sql`](./clientes_db.sql) |
-| 2 | **Primeras prácticas con la base de datos**  | Consultas simples y agregadas utilizando la base creada en el archivo anterior.            | [`Prac_basicas_para_analisis.sql`](./Prac_basicas_para_analisis.sql) |
+| 1 | **Creación de pequeña base de datos**        | Script que crea una base de datos de ejemplo y define tablas y relaciones básicas.         | [`schema.sql`](./schema.sql) |
+| 2 | **Primeras prácticas con la base de datos**  | Consultas simples y agregadas utilizando la base creada en el archivo anterior.            | [`queries_ventas_basico.sql`](./queries_ventas_basico.sql) |
 
 ---
 
