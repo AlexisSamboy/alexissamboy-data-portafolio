@@ -445,7 +445,7 @@ section{
   50%{ transform: translateY(3px); }
 }
 
-/* --- HEADERS DE SECCIÓN (sin overflow) --- */
+/* --- HEADERS DE SECCIÓN --- */
 .section-title{
   display:flex;
   align-items:center;
@@ -459,7 +459,6 @@ section{
 .section-title span{
   color: rgba(43,108,255,.95);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  margin-right: 0;
   font-size: 1.5rem;
 }
 .section-title::after{
@@ -654,10 +653,17 @@ section{
   opacity: .7;
 }
 
-/* ===== PROJECTS SHOWCASE + CAROUSEL ===== */
+/* ================================
+   PROJECTS SHOWCASE + CAROUSEL
+   (con consistencia real + tableau mini)
+================================ */
 .projects-showcase{ position: relative; }
+
 .showcase-card{
   position: relative;
+  display:flex;
+  flex-direction:column;
+  height:100%;
   border-radius: 22px;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
@@ -667,28 +673,136 @@ section{
   -webkit-backdrop-filter: blur(14px);
   transform: translateZ(0);
   will-change: transform, box-shadow, filter;
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 .showcase-card:hover{
   transform: translateY(-8px);
   box-shadow: 0 28px 85px rgba(0,0,0,.55), 0 0 0 1px rgba(43,108,255,.14) inset;
 }
-.showcase-thumb img{
+
+.showcase-thumb{
+  position:relative;
+  display:block;
   width:100%;
-  height: 220px;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  overflow:hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.showcase-thumb > img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
   object-fit: cover;
-  transform: scale(1.02);
-  transition: transform .55s cubic-bezier(.16,.84,.18,1), filter .55s ease;
+  transform: scale(1.01);
+  transition: transform .55s ease, filter .55s ease;
   filter: saturate(1.05) contrast(1.05);
 }
-.showcase-card:hover .showcase-thumb img{
-  transform: scale(1.08);
+.showcase-card:hover .showcase-thumb > img{
+  transform: scale(1.05);
   filter: saturate(1.15) contrast(1.08);
 }
-.showcase-body{ padding: 18px 18px 20px; }
+
+.showcase-thumb::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.08) 0%,
+    rgba(0,0,0,.18) 45%,
+    rgba(0,0,0,.55) 100%
+  );
+}
+
+.thumb-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:999px;
+  background: rgba(0,0,0,.42);
+  border: 1px solid rgba(255,255,255,.16);
+  color: rgba(255,255,255,.92);
+  font-size: 12px;
+  backdrop-filter: blur(10px);
+}
+.thumb-badge--live{
+  left:auto;
+  right:12px;
+}
+
+.showcase-body{
+  padding: 18px 18px 20px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
 .showcase-title{ margin: 6px 0 10px; font-size: 1.35rem; color: rgba(255,255,255,.95); }
-.showcase-desc{ margin: 0 0 14px; color: rgba(255,255,255,.72); }
-.showcase-tags{ display:flex; flex-wrap: wrap; gap: 10px; margin: 0 0 16px; }
-.showcase-actions{ display:flex; align-items:center; justify-content: space-between; gap: 12px; }
+
+.showcase-desc{
+  margin: 0 0 14px;
+  color: rgba(255,255,255,.72);
+  display:-webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow:hidden;
+}
+
+.showcase-tags{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 16px;
+  min-height: 44px;
+  align-content:flex-start;
+}
+
+.showcase-actions{
+  margin-top:auto;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ===== Tableau mini (preview en cards) ===== */
+.tableau-thumb{ display:block; overflow:hidden; border-radius: 18px; }
+
+.tableau-mini{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+.tableau-mini .tableau-static{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform .55s ease, opacity .25s ease;
+}
+.showcase-card:hover .tableau-mini .tableau-static{ transform: scale(1.05); }
+.tableau-mini .tableau-live{
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+.tableau-mini.is-live .tableau-static{
+  opacity:0;
+  pointer-events:none;
+}
 
 /* carousel */
 .projects-carousel{ position: relative; margin-top: 22px; }
@@ -751,7 +865,9 @@ section{
   transform: scale(1.2);
 }
 
-/* ===== CERTS vertical ===== */
+/* =========================
+   CERTS (LIMPIO + ESTABLE)
+   ========================= */
 .certs-vertical__subtitle{
   margin: -10px 0 34px;
   color: rgba(255,255,255,.70);
@@ -769,7 +885,7 @@ section{
 
 .cert-row{
   display:grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 340px 1fr;
   gap: 18px;
   border-radius: 22px;
   overflow:hidden;
@@ -779,12 +895,14 @@ section{
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  align-items: stretch;
 }
 .cert-row:hover{
   transform: translateY(-6px);
   border-color: rgba(43,108,255,.22);
   box-shadow: 0 26px 80px rgba(0,0,0,.52);
 }
+
 .cert-row__thumb{
   position:relative;
   display:block;
@@ -792,39 +910,71 @@ section{
 }
 .cert-row__thumb img{
   width:100%;
-  height: 100%;
+  height:100%;
   object-fit: cover;
+  display:block;
 }
-.cert-row__thumb.is-missing{
+
+.cert-row__body{
+  padding: 18px 18px 20px;
   display:grid;
-  place-items:center;
-  color: rgba(255,255,255,.70);
+  grid-template-rows: auto auto 1fr auto;
+  row-gap: 12px;
 }
-.thumb-fallback{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font-weight: 700;
-  opacity: .65;
-}
-.cert-row__body{ padding: 16px 16px 18px; }
+
 .cert-row__top{
   display:flex;
   justify-content: space-between;
   align-items:flex-start;
-  gap: 10px;
+  gap: 12px;
 }
-.cert-row__title{ margin: 0; color: rgba(255,255,255,.95); font-size: 1.15rem; }
-.cert-row__org{ margin: 6px 0 0; color: rgba(255,255,255,.70); }
-.cert-row__year{
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  color: rgba(255,255,255,.70);
-}
-.cert-row__chips{ display:flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
-.cert-row__actions{ display:flex; gap: 12px; align-items:center; }
 
-/* FOOTER */
+.cert-row__title{
+  margin: 0;
+  color: rgba(255,255,255,.95);
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+.cert-row__org{
+  margin: 6px 0 0;
+  color: rgba(255,255,255,.70);
+  line-height: 1.35;
+}
+
+.cert-row__year{
+  flex: 0 0 auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: rgba(255,255,255,.78);
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.12);
+  margin-top: 2px;
+}
+
+.cert-row__chips{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.cert-row__chips .chip{
+  width: 100%;
+  text-align:center;
+  padding: 9px 10px;
+  font-size: .86rem;
+}
+
+.cert-row__actions{
+  display:flex;
+  justify-content: flex-end;
+  gap: 12px;
+  align-items:center;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
 .footer{ text-align:center; padding: 70px 0 50px; margin-top: 50px; }
 .footer h3{ font-size: 2.5rem; color: rgba(255,255,255,.95); margin-bottom: 16px; }
 .footer p{ max-width: 540px; margin: 0 auto 34px auto; color: var(--text-secondary); }
@@ -859,7 +1009,9 @@ section{
   color: var(--text-tertiary);
 }
 
-/* SCROLL REVEAL */
+/* =========================
+   SCROLL REVEAL
+   ========================= */
 .scroll-reveal{
   opacity: 0;
   transform: translateY(26px);
@@ -881,6 +1033,38 @@ section{
 }
 
 /* =========================
+   CTA DE SECCIÓN (una sola vez)
+   ========================= */
+.section-cta{
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+/* MISMO botón (btn btn-primary big-btn) pero variando borde/glow */
+.btn.btn-primary.big-btn.btn-projects{
+  border-color: rgba(0, 212, 255, .55) !important;
+  box-shadow:
+    0 0 0 6px rgba(0, 212, 255, .10),
+    0 18px 60px rgba(0,0,0,.55) !important;
+}
+.btn.btn-primary.big-btn.btn-projects:hover{
+  background: rgba(0, 212, 255, .10) !important;
+  transform: translateY(-1px);
+}
+
+.btn.btn-primary.big-btn.btn-certs{
+  border-color: rgba(124, 58, 237, .58) !important;
+  box-shadow:
+    0 0 0 6px rgba(124, 58, 237, .10),
+    0 18px 60px rgba(0,0,0,.55) !important;
+}
+.btn.btn-primary.big-btn.btn-certs:hover{
+  background: rgba(124, 58, 237, .12) !important;
+  transform: translateY(-1px);
+}
+
+/* =========================
    RESPONSIVE (MÓVIL FINO)
    ========================= */
 @media (max-width: 900px){
@@ -892,7 +1076,8 @@ section{
   .about-img{ order: -1; margin-bottom: 30px; width: 80%; margin-left: auto; margin-right: auto; }
 
   .cert-row{ grid-template-columns: 1fr; }
-  .cert-row__thumb img{ height: 220px; }
+  .cert-row__thumb{ height: 220px; }
+  .cert-row__chips{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   /* móvil overlay vertical */
   .hero-pro__shade{
@@ -956,11 +1141,8 @@ section{
    DESKTOP TUNING (PC)
    ========================= */
 @media (min-width: 1100px){
-  .hero-pro{
-    padding: 110px 0 40px;
-  }
+  .hero-pro{ padding: 110px 0 40px; }
 
-  /* “max ancho premium” (sin encoger por flex) */
   .hero-pro__wrap.main-wrapper{
     width: 100%;
     max-width: 1560px;
@@ -968,7 +1150,6 @@ section{
     padding: 0 36px;
   }
 
-  /* card más Jacob-like */
   .hero-pro__card{
     height: min(78vh, 760px);
     min-height: 680px;
@@ -981,18 +1162,9 @@ section{
     gap: 14px;
   }
 
-  .hero-pro__name{
-    font-size: clamp(56px, 4.6vw, 92px);
-  }
-
-  .hero-pro__role{
-    font-size: clamp(18px, 1.9vw, 30px);
-  }
-
-  .hero-pro__desc{
-    font-size: 1.02rem;
-    max-width: 560px;
-  }
+  .hero-pro__name{ font-size: clamp(56px, 4.6vw, 92px); }
+  .hero-pro__role{ font-size: clamp(18px, 1.9vw, 30px); }
+  .hero-pro__desc{ font-size: 1.02rem; max-width: 560px; }
 
   .hero-pro__bg img{
     object-position: 80% 45%;
@@ -1000,295 +1172,4 @@ section{
   }
 
   .hero-pro__hint{ bottom: 18px; }
-}
-/* Centrado del CTA debajo de secciones */
-.section-cta{
-  margin-top: 22px;
-  display: flex;
-  justify-content: center;
-}
-
-/* === Variantes de color manteniendo el estilo del botón principal === */
-/* (No tocamos padding/radius/tipografía; solo color/glow) */
-
-.btn.btn-projects{
-  background: linear-gradient(90deg, rgba(0,212,255,.22), rgba(43,108,255,.22));
-  border: 1px solid rgba(0,212,255,.50);
-}
-
-.btn.btn-projects:hover{
-  background: linear-gradient(90deg, rgba(0,212,255,.30), rgba(43,108,255,.30));
-  box-shadow: 0 0 0 7px rgba(0,212,255,.08), 0 20px 60px rgba(0,0,0,.55);
-  transform: translateY(-1px);
-}
-
-.btn.btn-certs{
-  background: linear-gradient(90deg, rgba(124,58,237,.22), rgba(0,212,255,.18));
-  border: 1px solid rgba(124,58,237,.55);
-}
-
-.btn.btn-certs:hover{
-  background: linear-gradient(90deg, rgba(124,58,237,.30), rgba(0,212,255,.24));
-  box-shadow: 0 0 0 7px rgba(124,58,237,.08), 0 20px 60px rgba(0,0,0,.55);
-  transform: translateY(-1px);
-}
-/* Centrado igual al CTA del footer */
-.section-cta{
-  margin-top: 22px;
-  display: flex;
-  justify-content: center;
-}
-
-/* MISMO botón (btn btn-primary big-btn) pero variando color de borde/glow */
-
-/* PROYECTOS: cyan */
-.btn.btn-primary.big-btn.btn-projects{
-  border-color: rgba(0, 212, 255, .55) !important;
-  box-shadow:
-    0 0 0 6px rgba(0, 212, 255, .10),
-    0 18px 60px rgba(0,0,0,.55) !important;
-}
-.btn.btn-primary.big-btn.btn-projects:hover{
-  background: rgba(0, 212, 255, .10) !important;
-  transform: translateY(-1px);
-}
-
-/* CERTIFICADOS: violeta */
-.btn.btn-primary.big-btn.btn-certs{
-  border-color: rgba(124, 58, 237, .58) !important;
-  box-shadow:
-    0 0 0 6px rgba(124, 58, 237, .10),
-    0 18px 60px rgba(0,0,0,.55) !important;
-}
-.btn.btn-primary.big-btn.btn-certs:hover{
-  background: rgba(124, 58, 237, .12) !important;
-  transform: translateY(-1px);
-}
-/* ==============================
-   CERTS – FIX FINAL (más a la derecha + misma altura que imagen)
-   Pegar AL FINAL del style.css
-   ============================== */
-
-/* La tarjeta completa tendrá la MISMA altura que la imagen */
-.certs-vertical .cert-row{
-  grid-template-columns: 360px 1fr;  /* más ancho para la miniatura */
-  height: 240px;                    /* ✅ tarjeta = altura fija */
-  align-items: stretch;
-}
-
-/* Miniatura ocupa todo el alto de la tarjeta */
-.certs-vertical .cert-row__thumb{
-  height: 100% !important;
-  border-radius: 22px;
-  overflow: hidden;
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.10);
-}
-.certs-vertical .cert-row__thumb img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;               /* impactante */
-  display: block;
-}
-
-/* Quita fallback "Certificado" cuando hay imagen */
-.certs-vertical .cert-row__thumb .thumb-fallback{
-  display: none !important;
-}
-
-/* Body: grid interno para pegar botón abajo-derecha */
-.certs-vertical .cert-row__body{
-  position: relative;
-  height: 100%;
-  padding: 22px 26px;
-  display: grid;
-  grid-template-rows: auto 1fr auto; /* top | chips | acciones */
-  row-gap: 12px;
-}
-
-/* AÑO: arriba a la derecha (bien pegado) */
-.certs-vertical .cert-row__year{
-  position: absolute !important;
-  top: 14px !important;
-  right: 18px !important;          /* ✅ MÁS A LA DERECHA */
-  margin: 0 !important;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,255,255,.78);
-  z-index: 5;
-}
-
-/* Deja espacio a la derecha para que el año no monte texto */
-.certs-vertical .cert-row__top{
-  padding-right: 120px;
-}
-
-/* Título más grande */
-.certs-vertical .cert-row__title{
-  font-size: 1.6rem;
-  line-height: 1.12;
-  margin: 0;
-}
-
-/* Institución SIN comprimir feo */
-.certs-vertical .cert-row__org{
-  margin-top: 8px;
-  line-height: 1.35;
-  color: rgba(255,255,255,.72);
-  white-space: nowrap;             /* una línea elegante */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Chips distribuidas por TODO el ancho (sin banda abajo) */
-.certs-vertical .cert-row__chips{
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 por fila */
-  gap: 10px;
-  align-content: start;
-  overflow: hidden;                /* ✅ evita “banda” */
-}
-.certs-vertical .chip{
-  width: 100%;
-  text-align: center;
-  padding: 9px 10px;
-  font-size: .86rem;
-}
-
-/* BOTÓN: abajo a la derecha */
-.certs-vertical .cert-row__actions{
-  display: flex;
-  justify-content: flex-end;       /* ✅ MÁS A LA DERECHA */
-  align-items: flex-end;
-  position: absolute;
-  right: -70px;
-  bottom: 20px;   /* ✅ sube/baja aquí */
-  margin: 0;
-}
-
-/* Si aún existe el icono/“flecha”, lo ocultamos */
-.certs-vertical .cert-icon{
-  display: none !important;
-}
-
-/* Responsive */
-@media (max-width: 900px){
-  .certs-vertical .cert-row{
-    grid-template-columns: 1fr;
-    height: auto;                  /* en móvil NO fijo */
-  }
-  .certs-vertical .cert-row__thumb{
-    height: 220px !important;
-  }
-  .certs-vertical .cert-row__top{
-    padding-right: 0;
-  }
-  .certs-vertical .cert-row__year{
-    position: static !important;
-    justify-self: start;
-    margin-top: 8px !important;
-  }
-  .certs-vertical .cert-row__org{
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
-  .certs-vertical .cert-row__chips{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-/* ==============================
-   CERTS – MOBILE FIX (pegar al FINAL)
-   ============================== */
-@media (max-width: 600px){
-
-  /* Tarjeta en columna */
-  .certs-vertical .cert-row{
-    grid-template-columns: 1fr !important;
-    height: auto !important;
-    gap: 14px !important;
-  }
-
-  /* Imagen arriba, tamaño controlado */
-  .certs-vertical .cert-row__thumb{
-    height: 210px !important;
-    width: 100% !important;
-    border-radius: 22px !important;
-    overflow: hidden !important;
-  }
-  .certs-vertical .cert-row__thumb img{
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-  }
-
-  /* Cuerpo abajo, sin “posiciones raras” */
-  .certs-vertical .cert-row__body{
-    position: relative !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-    padding: 18px 18px 20px !important;
-    height: auto !important;
-  }
-
-  /* Título + año en la misma línea (año a la derecha) */
-  .certs-vertical .cert-row__top{
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
-    padding-right: 0 !important;
-  }
-  .certs-vertical .cert-row__title{
-    font-size: 1.45rem !important;
-    line-height: 1.15 !important;
-  }
-  .certs-vertical .cert-row__year{
-    position: static !important;     /* IMPORTANT: quita el absolute */
-    margin: 0 !important;
-    flex: 0 0 auto !important;
-  }
-
-  /* Institución sin recortes */
-  .certs-vertical .cert-row__org{
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-  }
-
-  /* Chips en 2 columnas */
-  .certs-vertical .cert-row__chips{
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    margin: 0 !important;
-  }
-  .certs-vertical .chip{
-    width: 100% !important;
-    text-align: center !important;
-  }
-
-  /* ✅ BOTÓN: ya NO absolute, y NO se corta */
-  .certs-vertical .cert-row__actions{
-    position: static !important;     /* IMPORTANT */
-    width: 100% !important;
-    display: flex !important;
-    justify-content: center !important; /* cambia a flex-end si lo quieres a la derecha */
-    margin-top: 6px !important;
-  }
-  .certs-vertical .cert-btn{
-    width: 100% !important;          /* botón ancho en móvil */
-    max-width: 320px;
-    justify-content: center !important;
-  }
-
-  /* Si existe el icono, fuera */
-  .certs-vertical .cert-icon{
-    display: none !important;
-  }
 }

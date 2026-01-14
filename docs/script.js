@@ -441,3 +441,63 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   })();
 });
+/* ===== Tableau Public mini-preview (lazy) ===== */
+(() => {
+  const minis = document.querySelectorAll('.tableau-mini[data-viz-url]');
+  if (!minis.length) return;
+
+  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+  let tableauApiPromise;
+  function loadTableauApi() {
+    if (tableauApiPromise) return tableauApiPromise;
+
+    tableauApiPromise = new Promise((resolve, reject) => {
+      if (window.tableau && window.tableau.Viz) return resolve();
+
+      const s = document.createElement('script');
+      s.src = 'https://public.tableau.com/javascripts/api/tableau-2.min.js';
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('No se pudo cargar la API de Tableau'));
+      document.head.appendChild(s);
+    });
+
+    return tableauApiPromise;
+  }
+
+  function mount(mini) {
+    if (mini.dataset.mounted === '1') return;
+    mini.dataset.mounted = '1';
+
+    const url = mini.dataset.vizUrl;
+
+    const live = document.createElement('div');
+    live.className = 'tableau-live';
+    mini.appendChild(live);
+
+    loadTableauApi()
+      .then(() => {
+        const options = { hideTabs: true };
+        new tableau.Viz(live, url, options);
+        mini.classList.add('is-live');
+      })
+      .catch(() => {
+        // Si falla, dejamos el preview estático.
+        mini.dataset.mounted = '0';
+        live.remove();
+      });
+  }
+
+  // Desktop: carga al hover (se siente “dinámico”)
+  if (!isCoarse) {
+    minis.forEach(mini => {
+      let t;
+      mini.addEventListener('mouseenter', () => {
+        t = setTimeout(() => mount(mini), 250);
+      });
+      mini.addEventListener('mouseleave', () => clearTimeout(t));
+    });
+  }
+})();
+
